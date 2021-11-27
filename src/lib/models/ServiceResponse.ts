@@ -7,7 +7,6 @@ export class ServiceResponse<T> {
         this.data = data;
     }
 
-
     public message: string;
     public success: boolean;
     public data: T;

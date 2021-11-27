@@ -22,6 +22,7 @@ export async function post(request: { body: string }) {
         };
 
     } catch (error: unknown) {
+        console.log("I crashed")
         return {
             status: 500,
             body: getFailedResponse(), 
