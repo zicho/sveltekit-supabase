@@ -7,7 +7,6 @@ export async function post(request: { body: string }) {
     let model: RegisterUserModel = JSON.parse(request.body);
     
     try {
-        throw new Error();
         const { user, error } = await supabase.auth.signUp({ email: model.email, password: model.password });
         if (error) {
             return {
@@ -22,7 +21,6 @@ export async function post(request: { body: string }) {
         };
 
     } catch (error: unknown) {
-        console.log("I crashed")
         return {
             status: 500,
             body: getFailedResponse(), 
