@@ -35,9 +35,9 @@
 	"type": "module",
 	"dependencies": {
 		"@supabase/supabase-js": "^1.28.1",
-		
 		"cookie": "^0.4.1",
 		"daisyui": "^1.16.2",
-		"js-cookie": "^3.0.1"
+		"js-cookie": "^3.0.1",
+		"svelte-kit": "^1.0.0"
 	}
 }
