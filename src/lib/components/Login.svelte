@@ -22,8 +22,8 @@
 			} else {
 				error = res.message;
 			}
-		} catch {
-			error = "Error"
+		} catch (err) {
+			error = err;
 		} finally {
 			loading = false;
 		}
