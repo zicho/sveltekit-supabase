@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { login } from '$lib/services/UserService';
+	import { login } from '$lib/stores/UserStore';
 	import { createEventDispatcher } from 'svelte';
 	import { LoginUserModel } from '$lib/models/user/LoginUserModel';
 	import { session } from '$app/stores';
@@ -13,12 +13,6 @@
 	async function onLoginClick() {
 		loading = true;
 
-		// if (!user.validate().success) {
-		// 	error = user.validate().message;
-		// 	loading = false;
-		// 	return;
-		// }
-
 		const res = await login(user);
 
 		if (res.success) {
@@ -31,9 +25,47 @@
 	}
 </script>
 
-<h1>Login</h1>
-<input type="email" required bind:value={user.email} />
-<input type="password" required bind:value={user.password} />
-
-{#if error != undefined}<p>{error}</p>{/if}
-<button disabled={loading} on:click={onLoginClick}>Login</button>
+<div class="card lg:card-side bordered bg-base-200">
+	<div class="card-body">
+		<h2 class="card-title object-center">Login</h2>
+		<div class="form-control">
+			<label class="label">
+				<span class="label-text">Username</span>
+			</label>
+			<input
+				required
+				bind:value={user.email}
+				type="email"
+				placeholder="email"
+				class="input input-info input-bordered"
+			/>
+		</div>
+		<div class="form-control margin-bottom-l">
+			<label class="label">
+				<span class="label-text">Password</span>
+			</label>
+			<input
+				required
+				bind:value={user.password}
+				type="password"
+				placeholder="password"
+				class="input input-info input-bordered"
+			/>
+		</div>
+		<div class="form-control">
+			<button class="btn" class:loading disabled={loading} on:click={onLoginClick}>
+				{#if !loading}
+					Login
+				{/if}
+			</button>
+			<label class="label">
+				{#if error != undefined}
+					<span class="label-text-alt">{error}</span>
+				{/if}
+			</label>
+		</div>
+		<label class="label">
+			<a href="/register"><span class="label-text-alt">Wanna join? Press this link to register!</span></a>
+		</label>
+	</div>
+</div>

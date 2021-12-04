@@ -1,6 +1,6 @@
 import { getFailedResponse, getSuccessResponse } from "$lib/models/ServiceResponse";
 import type { LoginUserModel } from "$lib/models/user/LoginUserModel";
-import { setSessionHeaders } from "$lib/services/UserService";
+import { setSessionHeaders } from "$lib/stores/UserStore";
 import { supabase } from "$lib/utils/db";
 
 export async function post(request: { body: string }) {

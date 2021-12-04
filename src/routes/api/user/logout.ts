@@ -1,5 +1,5 @@
 import { getFailedResponse, getSuccessResponse } from "$lib/models/ServiceResponse";
-import { clearSessionHeaders } from "$lib/services/UserService";
+import { clearSessionHeaders } from "$lib/stores/UserStore";
 import { supabase } from "$lib/utils/db";
 
 export async function post() {

@@ -1,0 +1,244 @@
+/* Write your global styles here, in PostCSS syntax */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Write your global styles here, in PostCSS syntax */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import '@fontsource/fira-mono';
+
+:root {
+	font-family: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+		Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	--font-mono: 'Fira Mono', monospace;
+
+
+	--mg-xs: 3px;
+	--mg-s: 5px;
+	--mg-m: 8px;
+	--mg-xm: 13px;
+	--mg-l: 21px;
+	--mg-xl: 34px;
+	--mg-xxl: 55px;
+
+}
+
+/* standard layout margin classes */
+
+/* eXtra Small */
+.margin-xs {
+	margin: var(--mg-xs);
+}
+
+.margin-top-xs {
+	margin-top: var(--mg-xs);
+}
+
+.margin-right-xs {
+	margin-right: var(--mg-xs);
+}
+
+.margin-bottom-xs {
+	margin-bottom: var(--mg-xs);
+}
+
+.margin-left-xs {
+	margin-left: var(--mg-xs);
+}
+
+/* Small */
+.margin-s {
+	margin: var(--mg-s);
+}
+
+.margin-top-s {
+	margin-top: var(--mg-s);
+}
+
+.margin-right-s {
+	margin-right: var(--mg-s);
+}
+
+.margin-bottom-s {
+	margin-bottom: var(--mg-s);
+}
+
+.margin-left-s {
+	margin-left: var(--mg-s);
+}
+
+/* Medium */
+.margin-m {
+	margin: var(--mg-m);
+}
+
+.margin-top-m {
+	margin-top: var(--mg-m);
+}
+
+.margin-right-m {
+	margin-right: var(--mg-m);
+}
+
+.margin-bottom-m {
+	margin-bottom: var(--mg-m);
+}
+
+.margin-left-m {
+	margin-left: var(--mg-m);
+}
+
+/* eXtra Medium */
+.margin-xm {
+	margin: var(--mg-xm);
+}
+
+.margin-top-xm {
+	margin-top: var(--mg-xm);
+}
+
+.margin-right-xm {
+	margin-right: var(--mg-xm);
+}
+
+.margin-bottom-xm {
+	margin-bottom: var(--mg-xm);
+}
+
+.margin-left-xm {
+	margin-left: var(--mg-xm);
+}
+
+/* Large */
+.margin-l {
+	margin: var(--mg-l);
+}
+
+.margin-top-l {
+	margin-top: var(--mg-l);
+}
+
+.margin-right-l {
+	margin-right: var(--mg-l);
+}
+
+.margin-bottom-l {
+	margin-bottom: var(--mg-l);
+}
+
+.margin-left-l {
+	margin-left: var(--mg-l);
+}
+
+/* eXtra xlarge */
+.margin-xl {
+	margin: var(--mg-xl);
+}
+
+.margin-top-xl {
+	margin-top: var(--mg-xl);
+}
+
+.margin-right-xl {
+	margin-right: var(--mg-xl);
+}
+
+.margin-bottom-xl {
+	margin-bottom: var(--mg-xl);
+}
+
+.margin-xleft-xl {
+	margin-left: var(--mg-xl);
+}
+
+/* eXtra eXtra Large */
+.margin-xxl {
+	margin: var(--mg-xxl);
+}
+
+.margin-top-xxl {
+	margin-top: var(--mg-xxl);
+}
+
+.margin-right-xxl {
+	margin-right: var(--mg-xxl);
+}
+
+.margin-bottom-xxl {
+	margin-bottom: var(--mg-xxl);
+}
+
+.margin-left-xxl {
+	margin-left: var(--mg-xxl);
+}
+
+body {
+	min-height: 100vh;
+	margin: 0;
+	/* background-color: var(--primary-color);
+	background: linear-gradient(180deg,
+			var(--primary-color) 0%,
+			var(--secondary-color) 10.45%,
+			var(--tertiary-color) 41.35%); */
+}
+
+
+main {
+	margin: 0 auto;
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+	/* Styles */
+	main {
+		width: 90%;
+	}
+}
+
+/* Smartphones (landscape) ----------- */
+@media only screen and (min-width : 321px) {
+	/* Styles */
+	main {
+		width: 90%;
+	}
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen and (max-width : 320px) {
+	/* Styles */
+	main {
+		width: 90%;
+	}
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+	/* Styles */
+	main {
+		width: 80%;
+	}
+}
+
+/* iPads (landscape) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+	/* Styles */
+	main {
+		width: 90%;
+	}
+}
+
+/* iPads (portrait) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
+	/* Styles */
+}
+
+/* Desktops and laptops ----------- */
+@media only screen and (min-width : 1224px) {
+	/* Styles */
+	main {
+		width: 50%;
+	}
+}

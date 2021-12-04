@@ -1,14 +1,23 @@
+import { writable } from 'svelte/store';
 import type { ServiceResponse } from "$lib/models/ServiceResponse";
 import type { LoginUserModel } from "$lib/models/user/LoginUserModel";
 import type { RegisterUserModel } from "$lib/models/user/RegisterUserModel";
-import { get, post } from "$lib/utils/EndpointClient";
+import { post } from "$lib/utils/EndpointClient";
 import type { Session } from "@supabase/gotrue-js";
 import cookie from 'cookie'
+
+export let loggedIn = writable<boolean>(false);
 
 export async function login(user: LoginUserModel): Promise<ServiceResponse<Session>> {
 
     try {
-        return await post<LoginUserModel, Session>('api/user/login', user);
+        var res = await post<LoginUserModel, Session>('api/user/login', user);
+
+        if (res.success) {
+            loggedIn.set(true);
+        }
+
+        return res;
 
     } catch (err) {
         console.log(err);
@@ -18,7 +27,13 @@ export async function login(user: LoginUserModel): Promise<ServiceResponse<Sessi
 export async function register(user: RegisterUserModel): Promise<ServiceResponse<Session>> {
 
     try {
-        return await post<RegisterUserModel, Session>('api/user/register', user);
+        let res = await post<RegisterUserModel, Session>('api/user/register', user);
+
+        if (res.success) {
+            loggedIn.set(true);
+        }
+
+        return res;
 
     } catch (err) {
         console.log(err);
@@ -28,7 +43,12 @@ export async function register(user: RegisterUserModel): Promise<ServiceResponse
 export async function logout(): Promise<ServiceResponse<void>> {
 
     try {
+
+        loggedIn.set(false);
+
         return await post('api/user/logout');
+
+
 
     } catch (err) {
         console.log(err);
