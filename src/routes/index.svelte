@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Register from '$lib/components/Register.svelte';
 	import { goto } from '$app/navigation';
+import Login from '$lib/components/Login.svelte';
 
 	function goToProfile() {
 		goto('/profile');
@@ -8,4 +9,4 @@
 </script>
 
 <button on:click={goToProfile}>Profile</button>
-<Register on:success={goToProfile} />
+<Login on:success={goToProfile} />

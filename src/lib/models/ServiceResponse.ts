@@ -16,6 +16,6 @@ export function getFailedResponse(error?: string) {
     return new ServiceResponse(error == undefined ? 'There was an error processing this request' : error, false)
 }
 
-export function getSuccessResponse<T>(data: T) {
+export function getSuccessResponse<T>(data?: T) {
     return new ServiceResponse('Success!', true, data)
 }

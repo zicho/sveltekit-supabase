@@ -1,23 +1,22 @@
 import { getFailedResponse, getSuccessResponse } from "$lib/models/ServiceResponse";
-import type { RegisterUserModel } from "$lib/models/user/RegisterUserModel";
+import type { LoginUserModel } from "$lib/models/user/LoginUserModel";
 import { setSessionHeaders } from "$lib/services/UserService";
 import { supabase } from "$lib/utils/db";
 
 export async function post(request: { body: string }) {
 
-    let model: RegisterUserModel = JSON.parse(request.body);
-
-    console.dir(model)
+    let model: LoginUserModel = JSON.parse(request.body);
 
     try {
-        const { session, error } = await supabase.auth.signUp({ email: model.email, password: model.password });
-
+        const { session, error } = await supabase.auth.signIn({ email: model.email, password: model.password });
         if (error) {
             return {
                 status: error.status,
                 body: getFailedResponse(error.message),
             };
         }
+
+        console.dir(session)
 
         return {
             status: 200,
