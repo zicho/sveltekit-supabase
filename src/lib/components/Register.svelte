@@ -2,7 +2,7 @@
 	import { register } from '$lib/stores/UserStore';
 	import { RegisterUserModel } from '$lib/models/user/RegisterUserModel';
 	import { createEventDispatcher } from 'svelte';
-import { session } from '$app/stores';
+	import { session } from '$app/stores';
 	// import { post } from '$lib/utils/EndpointClient';
 
 	let loading: boolean = false;
@@ -19,15 +19,20 @@ import { session } from '$app/stores';
 			return;
 		}
 
-		const res = await register(user);
+		try {
+			const res = await register(user);
 
-		if (res.success) {
-			$session = res.data;
-			dispatch('success');
-		} else {
-			error = res.message;
+			if (res.success) {
+				$session = res.data;
+				dispatch('success');
+			} else {
+				error = res.message;
+			}
+		} catch {
+			error = 'Error';
+		} finally {
+			loading = false;
 		}
-		loading = false;
 	}
 </script>
 
@@ -71,7 +76,7 @@ import { session } from '$app/stores';
 			/>
 		</div>
 		<div class="form-control">
-			<button class="btn" class:loading={loading} disabled={loading} on:click={onRegisterClick}>
+			<button class="btn" class:loading disabled={loading} on:click={onRegisterClick}>
 				{#if !loading}
 					Register
 				{/if}

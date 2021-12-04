@@ -13,15 +13,20 @@
 	async function onLoginClick() {
 		loading = true;
 
-		const res = await login(user);
+		try {
+			const res = await login(user);
 
-		if (res.success) {
-			$session = res.data;
-			dispatch('success');
-		} else {
-			error = res.message;
+			if (res.success) {
+				$session = res.data;
+				dispatch('success');
+			} else {
+				error = res.message;
+			}
+		} catch {
+			error = "Error"
+		} finally {
+			loading = false;
 		}
-		loading = false;
 	}
 </script>
 
@@ -65,7 +70,9 @@
 			</label>
 		</div>
 		<label class="label">
-			<a href="/register"><span class="label-text-alt">Wanna join? Press this link to register!</span></a>
+			<a href="/register"
+				><span class="label-text-alt">Wanna join? Press this link to register!</span></a
+			>
 		</label>
 	</div>
 </div>
