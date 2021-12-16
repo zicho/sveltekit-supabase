@@ -19,17 +19,11 @@
 			if (nonAuthedRoutes.includes(path)) {
 				return {
 					status: 302,
-					redirect: '/',
-					props: {
-						session: session
-					}
+					redirect: '/'
 				};
 			}
 			return {
 				status: 200,
-				props: {
-					session: session
-				}
 			};
 		}
 	}
@@ -37,24 +31,15 @@
 
 <script lang="ts">
 	import '../app.css';
-	import { loggedIn } from '$lib/stores/UserStore';
-	import { browser } from '$app/env';
-	import type { Session } from '@supabase/gotrue-js';
-	import { session as s } from '$app/stores';
+	import { session } from '$app/stores';
 	import { logout } from '$lib/stores/UserStore';
 	import { goto } from '$app/navigation';
-
-	export let session: Session;
-
-	if (session && browser) {
-		$loggedIn = true;
-	}
 
 	async function onLogoutClicked() {
 		const res = await logout();
 
 		if (res.success) {
-			$s = null;
+			$session = null;
 			goto('/');
 		}
 	}
@@ -66,19 +51,16 @@
 	</div>
 
 	<div class="flex-1 px-2 mx-2">
-		{#if $loggedIn}
+		{#if $session}
 			<div class="items-stretch hidden lg:flex">
-				<a class="btn btn-ghost btn-sm rounded-btn"> Home </a>
-				<a class="btn btn-ghost btn-sm rounded-btn"> Portfolio </a>
-				<a class="btn btn-ghost btn-sm rounded-btn"> About </a>
-				<a class="btn btn-ghost btn-sm rounded-btn"> Contact </a>
+				<a href="/profile" class="btn btn-ghost btn-sm rounded-btn">Profile</a>
 			</div>
 		{/if}
 	</div>
 
 	<div class="flex-none">
-		{#if $loggedIn}
-			<a on:click={onLogoutClicked} class="btn btn-ghost btn-sm rounded-btn">Log Out</a>
+		{#if $session}
+			<span on:click={onLogoutClicked} class="btn btn-ghost btn-sm rounded-btn">Log Out</span>
 		{:else}
 			<a href="/register" class="btn btn-ghost btn-sm rounded-btn">Register</a>
 		{/if}

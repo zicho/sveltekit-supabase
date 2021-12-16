@@ -1,7 +1,7 @@
 import { getFailedResponse, getSuccessResponse } from "$lib/models/ServiceResponse";
 import type { LoginUserModel } from "$lib/models/user/LoginUserModel";
 import { setSessionHeaders } from "$lib/stores/UserStore";
-import { supabase } from "$lib/utils/db";
+import { supabase, users } from "$lib/utils/db";
 
 export async function post(request: { body: string }) {
 
@@ -16,11 +16,11 @@ export async function post(request: { body: string }) {
             };
         }
 
-        console.dir(session)
+        let userProfileModel= await users.profileById(session.user.id);
 
         return {
             status: 200,
-            body: getSuccessResponse(session),
+            body: getSuccessResponse({session, userProfileModel}),
             headers: setSessionHeaders(session)
         };
 
