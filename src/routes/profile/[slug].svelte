@@ -7,11 +7,11 @@
 		let slug = page.params.slug;
 
 		try {
-			console.log('ON LOAD TRIGGERED');
-			var res = await profile();
+			console.log('ON LOAD TRIGGERED: ' + slug);
+			var res = await fetch("/api/user/" + slug);
 
-			console.dir(res.data);
-			user = res.data;
+			var data = await res.json();
+			user = data.data;
 		} catch (err) {
 			console.log(err);
 		}

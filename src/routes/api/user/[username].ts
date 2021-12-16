@@ -1,11 +1,15 @@
 import { getSuccessResponse } from "$lib/models/ServiceResponse";
 import { users } from "$lib/utils/db";
 
-export async function get() {
+export async function get({params}) {
 
     console.dir('Hitting the endpoint')
+    console.dir(params.username)
 
-    const data = await users.profile('datanist');
+
+    const data = await users.profile(params.username);
+
+    console.dir(data)
 
 
     console.dir("returning data");
