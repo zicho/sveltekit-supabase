@@ -8,10 +8,10 @@
 
 		try {
 			console.log('ON LOAD TRIGGERED: ' + slug);
-			var res = await fetch("/api/user/" + slug);
+			var res = await profile(slug);
 
-			var data = await res.json();
-			user = data.data;
+			console.dir(res)
+			user = res.data;
 
 			// console.dir(await profile(slug));
 
@@ -29,7 +29,7 @@
 </script>
 
 <script lang="ts">
-	export let user: UserProfileModel;
+	
 </script>
 
 <h1>Profilio</h1>

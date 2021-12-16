@@ -32,7 +32,7 @@
 <script lang="ts">
 	import '../app.css';
 	import { session } from '$app/stores';
-	import { logout } from '$lib/stores/UserStore';
+	import { logout, user } from '$lib/stores/UserStore';
 	import { goto } from '$app/navigation';
 
 	async function onLogoutClicked() {
@@ -51,9 +51,9 @@
 	</div>
 
 	<div class="flex-1 px-2 mx-2">
-		{#if $session}
+		{#if $user && $session}
 			<div class="items-stretch hidden lg:flex">
-				<a href="/profile" class="btn btn-ghost btn-sm rounded-btn">Profile</a>
+				<a href="/profile/{$user.username}" class="btn btn-ghost btn-sm rounded-btn">Profile</a>
 			</div>
 		{/if}
 	</div>

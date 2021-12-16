@@ -47,11 +47,8 @@ export async function profile(username: string): Promise<ServiceResponse<UserPro
     try {
         console.log("hittin the service")
         // console.log("username: " + username)
-        var res = await get<UserProfileModel>('/api/user/' + username);
-        console.log("-------------------------------------------")
-        console.log("Data returned from get: ")
-        console.dir(res)
-        console.log("-------------------------------------------")
+        var res = await get<UserProfileModel>('api/user/' + username);
+
         return res;
     } catch (err) {
         console.log(err);
