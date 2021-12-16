@@ -43,11 +43,11 @@ export async function logout(): Promise<ServiceResponse<void>> {
     }
 }
 
-export async function profile(): Promise<ServiceResponse<UserProfileModel>> {
+export async function profile(username: string): Promise<ServiceResponse<UserProfileModel>> {
     try {
         console.log("hittin the service")
         // console.log("username: " + username)
-        var res = await get<UserProfileModel>('/api/user/test');
+        var res = await get<UserProfileModel>('/api/user/' + username);
         console.log("-------------------------------------------")
         console.log("Data returned from get: ")
         console.dir(res)

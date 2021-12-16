@@ -12,6 +12,9 @@
 
 			var data = await res.json();
 			user = data.data;
+
+			// console.dir(await profile(slug));
+
 		} catch (err) {
 			console.log(err);
 		}
