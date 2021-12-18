@@ -43,7 +43,6 @@
 
 		if (res.success) {
 			$session = null;
-			setLoc
 			goto('/');
 		}
 	}
