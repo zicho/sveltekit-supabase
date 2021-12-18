@@ -1,4 +1,7 @@
 <script lang="ts" context="module">
+	import { Toasts } from 'as-toast';
+	import Fa from 'svelte-fa'
+	import { faUser } from '@fortawesome/free-solid-svg-icons'
 	let nonProtectedRoutes: string[] = ['/about'];
 	let nonAuthedRoutes: string[] = ['/login', '/register'];
 
@@ -23,7 +26,7 @@
 				};
 			}
 			return {
-				status: 200,
+				status: 200
 			};
 		}
 	}
@@ -32,7 +35,7 @@
 <script lang="ts">
 	import '../app.css';
 	import { session } from '$app/stores';
-	import { logout, user } from '$lib/stores/UserStore';
+	import { logout, signedInUser } from '$lib/stores/UserStore';
 	import { goto } from '$app/navigation';
 
 	async function onLogoutClicked() {
@@ -40,10 +43,13 @@
 
 		if (res.success) {
 			$session = null;
+			setLoc
 			goto('/');
 		}
 	}
 </script>
+
+<Toasts />
 
 <div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content">
 	<div class="flex-none px-2 mx-2">
@@ -51,9 +57,11 @@
 	</div>
 
 	<div class="flex-1 px-2 mx-2">
-		{#if $user && $session}
+		{#if $signedInUser && $session}
 			<div class="items-stretch hidden lg:flex">
-				<a href="/profile/{$user.username}" class="btn btn-ghost btn-sm rounded-btn">Profile</a>
+				<a href="/profile/{$signedInUser.username}" class="btn btn-ghost btn-sm rounded-btn"
+					><Fa class="margin-right-s" icon={faUser} />{$signedInUser.username}</a
+				>
 			</div>
 		{/if}
 	</div>
@@ -86,4 +94,4 @@
 
 <div class="container mx-auto">
 	<slot />
-  </div>
+</div>
