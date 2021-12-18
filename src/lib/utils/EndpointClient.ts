@@ -22,7 +22,7 @@ export async function get<T1>(endpoint: string): Promise<ServiceResponse<T1>> {
 
 // T1 is what you send in, T2 is what you get back.
 export async function post<T1, T2>(endpoint: string, body?: T1): Promise<ServiceResponse<T2>> {
-    console.log(`EndPointClient: POST request at: ${appURL}/${endpoint}`);
+    console.log(`EndPointClient: GET request at: ${appURL}/${endpoint}`);
     
     try {
         const res = await fetch(`${appURL}/${endpoint}`, {

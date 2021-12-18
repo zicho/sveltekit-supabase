@@ -8,12 +8,19 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 export const users = {
     async profile(username: string): Promise<UserProfileModel> {
-        const { data } = await supabase
+        try {
+            const { data } = await supabase
             .from('profiles')
             .select('username, description')
             .eq('username', username);
 
+
         return data[0] as UserProfileModel;
+        } catch(err) {
+            console.log(err)
+            return null;
+        }
+         
     },
     
     async profileById(id: string): Promise<UserProfileModel> {

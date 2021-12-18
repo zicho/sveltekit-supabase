@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { login, setUserAndSession } from '$lib/stores/UserStore';
+	import { login, setUserAndSession, signedInUser } from '$lib/stores/UserStore';
 	import { createEventDispatcher } from 'svelte';
 	import { LoginUserModel } from '$lib/models/user/LoginUserModel';
-	import { session } from '$app/stores';
-
+	import { addToast } from "as-toast"
 	let loading: boolean = false;
 	let loginUserModel: LoginUserModel = new LoginUserModel();
 
@@ -17,8 +16,11 @@
 			const res = await login(loginUserModel);
 
 			if (res.success) {
+				console.log('user set')
 				setUserAndSession(res.data.session, res.data.userProfileModel);
+				addToast("Welcome " + $signedInUser.username)
 				dispatch('success');
+				
 			} else {
 				error = res.message;
 			}

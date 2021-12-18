@@ -2,7 +2,6 @@
 	import { register, setUserAndSession } from '$lib/stores/UserStore';
 	import { RegisterUserModel } from '$lib/models/user/RegisterUserModel';
 	import { createEventDispatcher } from 'svelte';
-	import { user } from '$lib/stores/UserStore';
 
 	let loading: boolean = false;
 	let registerUserModel: RegisterUserModel = new RegisterUserModel();
@@ -22,11 +21,7 @@
 			const res = await register(registerUserModel);
 
 			if (res.success) {
-
-				console.dir(res.data)
-
 				setUserAndSession(res.data.session, res.data.userProfileModel);
-				console.dir($user)
 				dispatch('success');
 			} else {
 				error = res.message;

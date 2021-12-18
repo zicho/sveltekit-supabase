@@ -7,14 +7,16 @@ import type { Session } from "@supabase/gotrue-js";
 import cookie from 'cookie'
 import type { UserProfileModel } from '$lib/models/user/UserProfileModel';
 import { session } from '$app/stores';
+import { browser } from '$app/env';
 
-export let user = writable<UserProfileModel>(null);
+//export const signedInUser = writable<UserProfileModel>(null)
+export const signedInUser = writable<UserProfileModel>(getUserFromStorage());
+signedInUser.subscribe(val => setUserInLocalStorage(val));
 
 export async function login(user: LoginUserModel): Promise<ServiceResponse<{ session: Session, userProfileModel: UserProfileModel }>> {
 
     try {
         var res = await post<LoginUserModel, { session: Session, userProfileModel: UserProfileModel }>('api/user/login', user);
-
         return res;
 
     } catch (err) {
@@ -37,6 +39,7 @@ export async function register(user: RegisterUserModel): Promise<ServiceResponse
 export async function logout(): Promise<ServiceResponse<void>> {
 
     try {
+        signedInUser.set(null);
         return await post('api/user/logout');
     } catch (err) {
         console.log(err);
@@ -45,10 +48,7 @@ export async function logout(): Promise<ServiceResponse<void>> {
 
 export async function profile(username: string): Promise<ServiceResponse<UserProfileModel>> {
     try {
-        console.log("hittin the service")
-        // console.log("username: " + username)
         var res = await get<UserProfileModel>('api/user/' + username);
-
         return res;
     } catch (err) {
         console.log(err);
@@ -71,7 +71,7 @@ export function setSessionHeaders(session: Session) {
 
 export function setUserAndSession(s: Session, userProfileModel: UserProfileModel) {
     session.set(s);
-    user.set(userProfileModel);
+    signedInUser.set(userProfileModel);
 }
 
 
@@ -81,3 +81,17 @@ export function clearSessionHeaders() {
         'set-cookie': 'access_token=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
     }
 }
+
+function getUserFromStorage(): UserProfileModel {
+    if (browser) {
+        return JSON.parse(localStorage.getItem("user")) || null
+    }
+
+}
+function setUserInLocalStorage(val: UserProfileModel): void {
+    if(browser) {
+        localStorage.setItem("user", JSON.stringify(val))
+    }
+    
+}
+
