@@ -1,8 +1,8 @@
 import { getSuccessResponse } from "$lib/models/ServiceResponse";
-import { users } from "$lib/utils/db";
+import { UserRepository } from "$lib/utils/repositories/RepositoryBase copy";
 
 export async function get({params}) {
-    const data = await users.profile(params.username);
+    const data = await UserRepository.profile(params.username);
 
     return {
         status: 200,

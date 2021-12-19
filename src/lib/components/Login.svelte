@@ -15,8 +15,12 @@
 		try {
 			const res = await login(loginUserModel);
 
+			console.dir("-----------------")
+			console.dir(res.data.userProfileModel.data)
+			console.dir("-----------------")
+
 			if (res.success) {
-				setUserAndSession(res.data.session, res.data.userProfileModel);
+				setUserAndSession(res.data.session, res.data.userProfileModel.data);
 				addToast("Welcome " + $signedInUser.username)
 				dispatch('success');
 				

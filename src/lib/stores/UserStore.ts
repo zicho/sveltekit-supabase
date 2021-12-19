@@ -8,8 +8,6 @@ import cookie from 'cookie'
 import type { UserProfileModel } from '$lib/models/user/UserProfileModel';
 import { session } from '$app/stores';
 import { browser } from '$app/env';
-import { detach_before_dev } from 'svelte/internal';
-import { users } from '$lib/utils/db';
 
 //export const signedInUser = writable<UserProfileModel>(null)
 export const signedInUser = writable<UserProfileModel>(getUserFromStorage());
@@ -19,6 +17,7 @@ export async function login(user: LoginUserModel): Promise<ServiceResponse<{ ses
 
     try {
         var res = await post<LoginUserModel, { session: Session, userProfileModel: UserProfileModel }>('api/user/login', user);
+
         return res;
 
     } catch (err) {
@@ -73,6 +72,8 @@ export function setSessionHeaders(session: Session) {
 
 export function setUserAndSession(s: Session, userProfileModel: UserProfileModel) {
     session.set(s);
+    console.dir(userProfileModel)
+    console.log("SETTING!")
     signedInUser.set(userProfileModel);
 }
 
@@ -85,10 +86,14 @@ export function clearSessionHeaders() {
 }
 
 export async function getAll() {
-    var data = await users.getAll()
-    console.dir(data)
-    return data
+    try {
+        var res = await get<UserProfileModel>('api/user/getAll');
+        return res;
+    } catch (err) {
+        console.log(err);
+    }
 }
+
 
 function getUserFromStorage(): UserProfileModel {
     if (browser) {

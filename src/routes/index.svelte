@@ -1,38 +1,33 @@
 <script lang="ts" context="module">
-	import { getAll } from '$lib/stores/UserStore';
-    import { users } from '$lib/utils/db';
-	export async function load({ page }) {
+	import type { UserProfileModel } from '$lib/models/user/UserProfileModel';
+	import type { ServiceResponse } from '$lib/models/ServiceResponse';
+
+	export async function load({ page, fetch }) {
 		try {
-			var res = await users.getAll();
-            console.log(res)
+			var res = await fetch('api/user/getAll');
+			var data = (await res.json()) as ServiceResponse<UserProfileModel>;
+
+			return {
+				status: 200,
+				props: {
+					users: data.data
+				}
+			};
 		} catch (err) {
 			console.log(err);
+			return {
+				status: 500
+			};
 		}
-
-		return {
-			status: 200,
-			props: {
-				users: res
-			}
-		};
 	}
 </script>
 
 <script lang="ts">
-	import type { UserProfileModel } from '$lib/models/user/UserProfileModel';
-
-import { onMount } from 'svelte';
-
-
 	export let users: UserProfileModel[];
-    let mounted = false;
-
-    onMount(() => mounted = true)
 </script>
 
 <h1>You are logged in.</h1>
 
-{#if mounted && users.length > 0}
 <ul>
 	{#each users as u}
 		<li>
@@ -40,5 +35,3 @@ import { onMount } from 'svelte';
 		</li>
 	{/each}
 </ul>
-
-{/if}
