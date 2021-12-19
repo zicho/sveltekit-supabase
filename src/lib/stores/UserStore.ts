@@ -8,6 +8,8 @@ import cookie from 'cookie'
 import type { UserProfileModel } from '$lib/models/user/UserProfileModel';
 import { session } from '$app/stores';
 import { browser } from '$app/env';
+import { detach_before_dev } from 'svelte/internal';
+import { users } from '$lib/utils/db';
 
 //export const signedInUser = writable<UserProfileModel>(null)
 export const signedInUser = writable<UserProfileModel>(getUserFromStorage());
@@ -39,7 +41,7 @@ export async function register(user: RegisterUserModel): Promise<ServiceResponse
 export async function logout(): Promise<ServiceResponse<void>> {
 
     try {
-        signedInUser.set(null);
+        // ;
         return await post('api/user/logout');
     } catch (err) {
         console.log(err);
@@ -80,6 +82,12 @@ export function clearSessionHeaders() {
     return {
         'set-cookie': 'access_token=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
     }
+}
+
+export async function getAll() {
+    var data = await users.getAll()
+    console.dir(data)
+    return data
 }
 
 function getUserFromStorage(): UserProfileModel {

@@ -1,4 +1,4 @@
-import type { UserProfileModel } from '$lib/models/user/UserProfileModel'
+import { UserProfileModel } from '$lib/models/user/UserProfileModel'
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string
@@ -30,5 +30,16 @@ export const users = {
             .eq('id', id);
 
         return data[0] as UserProfileModel;
+    },
+
+        
+    async getAll(): Promise<UserProfileModel[]> {
+        const { data } = await supabase
+            .from('profiles')
+            .select('*')
+
+        console.dir(data)
+
+        return data//new Array<UserProfileModel>()// UserProfileModel[];
     }
 }

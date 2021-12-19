@@ -16,7 +16,6 @@
 			const res = await login(loginUserModel);
 
 			if (res.success) {
-				console.log('user set')
 				setUserAndSession(res.data.session, res.data.userProfileModel);
 				addToast("Welcome " + $signedInUser.username)
 				dispatch('success');

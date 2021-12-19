@@ -4,18 +4,13 @@
 
 	export async function load({ page }) {
 
-		console.log("LOAD!")
-
 		let slug = page.params.slug;
 
 		try {
 			var res = await profile(slug);
-			console.dir(res);
 		} catch (err) {
 			console.log(err);
 		}
-
-		console.log('load finished');
 
 		return {
 			status: 200,
@@ -33,16 +28,13 @@
 	let hasMounted = false
 
 	onMount(() => {
-		console.log("mounted")
-		console.dir($signedInUser)
 		hasMounted = true;
 	});
 </script>
 
 	<h1>Profile of {user.username}</h1>
 
-	{#if hasMounted && user.username == $signedInUser.username}
-		It's you
-	{:else}
+	{#if hasMounted && user.username != $signedInUser.username}
+		
 		Not you
 	{/if}

@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
 	import { Toasts } from 'as-toast';
-	import Fa from 'svelte-fa'
-	import { faUser } from '@fortawesome/free-solid-svg-icons'
+	import Fa from 'svelte-fa';
+	import { faUser } from '@fortawesome/free-solid-svg-icons';
 	let nonProtectedRoutes: string[] = ['/about'];
 	let nonAuthedRoutes: string[] = ['/login', '/register'];
 
@@ -43,6 +43,7 @@
 
 		if (res.success) {
 			$session = null;
+			$signedInUser = null;
 			goto('/');
 		}
 	}
