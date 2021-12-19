@@ -22,6 +22,8 @@
 </script>
 
 <script lang="ts">
+import SendPrivateMessage from '$lib/components/SendPrivateMessage.svelte';
+
 	export let user: UserProfileModel;
 	import { signedInUser } from '$lib/stores/UserStore';
 	import { onMount } from 'svelte';
@@ -35,6 +37,5 @@
 	<h1>Profile of {user.username}</h1>
 
 	{#if hasMounted && user.username != $signedInUser.username}
-		
-		Not you
+		<SendPrivateMessage sender={$signedInUser.username} recipient={user.username}/>
 	{/if}
