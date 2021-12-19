@@ -1,7 +1,11 @@
 <script lang="ts">
-	import { register, setUserAndSession } from '$lib/stores/UserStore';
+	import { setUserAndSession, signedInUser } from '$lib/stores/UserStore';
 	import { RegisterUserModel } from '$lib/models/user/RegisterUserModel';
 	import { createEventDispatcher } from 'svelte';
+	import type { Session } from '@supabase/supabase-js';
+	import type { UserProfileModel } from '$lib/models/user/UserProfileModel';
+	import type { ServiceResponse } from '$lib/models/ServiceResponse';
+	import { addToast } from 'as-toast';
 
 	let loading: boolean = false;
 	let registerUserModel: RegisterUserModel = new RegisterUserModel();
@@ -18,13 +22,23 @@
 		}
 
 		try {
-			const res = await register(registerUserModel);
+			const res = await fetch('api/user/register', {
+				method: 'POST',
+				body: JSON.stringify(registerUserModel)
+			});
 
-			if (res.success) {
-				setUserAndSession(res.data.session, res.data.userProfileModel);
+			let data = (await res.json()) as ServiceResponse<{
+				session: Session;
+				userProfileModel: UserProfileModel;
+			}>;
+
+			if (data.success) {
+				setUserAndSession(data.data.session, data.data.userProfileModel);
+				addToast('Welcome ' + $signedInUser.username);
 				dispatch('success');
 			} else {
-				error = res.message;
+				console.dir(data)
+				error = data.message;
 			}
 		} catch (err) {
 			error = err;

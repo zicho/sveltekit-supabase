@@ -2,7 +2,7 @@ import { writable } from 'svelte/store';
 import type { ServiceResponse } from "$lib/models/ServiceResponse";
 import type { LoginUserModel } from "$lib/models/user/LoginUserModel";
 import type { RegisterUserModel } from "$lib/models/user/RegisterUserModel";
-import { get, post } from "$lib/utils/EndpointClient";
+import { post } from "$lib/utils/EndpointClient";
 import type { Session } from "@supabase/gotrue-js";
 import cookie from 'cookie'
 import type { UserProfileModel } from '$lib/models/user/UserProfileModel';
@@ -13,48 +13,36 @@ import { browser } from '$app/env';
 export const signedInUser = writable<UserProfileModel>(getUserFromStorage());
 signedInUser.subscribe(val => setUserInLocalStorage(val));
 
-export async function login(user: LoginUserModel): Promise<ServiceResponse<{ session: Session, userProfileModel: UserProfileModel }>> {
+// export async function register(user: RegisterUserModel): Promise<ServiceResponse<{ session: Session, userProfileModel: UserProfileModel }>> {
 
-    try {
-        var res = await post<LoginUserModel, { session: Session, userProfileModel: UserProfileModel }>('api/user/login', user);
+//     try {
+//         let res = await post<RegisterUserModel, { session: Session, userProfileModel: UserProfileModel }>('api/user/register', user);
 
-        return res;
+//         return res;
 
-    } catch (err) {
-        console.log(err);
-    }
-}
+//     } catch (err) {
+//         console.log(err);
+//     }
+// }
 
-export async function register(user: RegisterUserModel): Promise<ServiceResponse<{ session: Session, userProfileModel: UserProfileModel }>> {
+// export async function logout(): Promise<ServiceResponse<void>> {
 
-    try {
-        let res = await post<RegisterUserModel, { session: Session, userProfileModel: UserProfileModel }>('api/user/register', user);
+//     try {
+//         // ;
+//         return await post('api/user/logout');
+//     } catch (err) {
+//         console.log(err);
+//     }
+// }
 
-        return res;
-
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-export async function logout(): Promise<ServiceResponse<void>> {
-
-    try {
-        // ;
-        return await post('api/user/logout');
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-export async function profile(username: string): Promise<ServiceResponse<UserProfileModel>> {
-    try {
-        var res = await get<UserProfileModel>('api/user/' + username);
-        return res;
-    } catch (err) {
-        console.log(err);
-    }
-}
+// export async function profile(username: string): Promise<ServiceResponse<UserProfileModel>> {
+//     try {
+//         var res = await get<UserProfileModel>('api/user/' + username);
+//         return res;
+//     } catch (err) {
+//         console.log(err);
+//     }
+// }
 
 export function setSessionHeaders(session: Session) {
     return {
@@ -84,16 +72,6 @@ export function clearSessionHeaders() {
         'set-cookie': 'access_token=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
     }
 }
-
-export async function getAll() {
-    try {
-        var res = await get<UserProfileModel>('api/user/getAll');
-        return res;
-    } catch (err) {
-        console.log(err);
-    }
-}
-
 
 function getUserFromStorage(): UserProfileModel {
     if (browser) {

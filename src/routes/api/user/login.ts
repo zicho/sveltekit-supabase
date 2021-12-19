@@ -2,7 +2,7 @@ import { getFailedResponse, getSuccessResponse } from "$lib/models/ServiceRespon
 import type { LoginUserModel } from "$lib/models/user/LoginUserModel";
 import { setSessionHeaders } from "$lib/stores/UserStore";
 import { supabase, } from "$lib/utils/db";
-import { UserRepository } from "$lib/utils/repositories/RepositoryBase copy";
+import { UserRepository } from "$lib/utils/repositories/UserRepository"
 
 export async function post(request: { body: string }) {
 

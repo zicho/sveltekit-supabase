@@ -7,7 +7,7 @@ export enum Table {
 }
 
 export abstract class RepositoryBase {
-    static async getSingle<T>(id: string, table: Table):Promise<ServiceResponse<T|unknown>>  {
+    static async getSingle<T>(id: string, table: Table):Promise<T>  {
         try {
             const { data, error } = await supabase
                 .from<T>(table)
@@ -15,30 +15,48 @@ export abstract class RepositoryBase {
                 .match({ "id": id });
 
             if (!error) {
-                return getSuccessResponse(data[0])
+                return data[0]
             } else {
-                return getFailedResponse(error.message)
+                return null;
             }
         } catch (error) {
             console.log(error)
-            return getFailedResponse("Something went wrong");
+            return null;
         }
     };
 
-    static async getAll<T>(table: Table): Promise<ServiceResponse<T[]|unknown>> {
+    static async getAll<T>(table: Table): Promise<T[]> {
         try {
             const { data, error } = await supabase
                 .from<T>(table)
                 .select("*")
 
             if (!error) {
-                return getSuccessResponse(data)
+                return data;
             } else {
-                return getFailedResponse(error.message)
+                return null;
             }
         } catch (error) {
             console.log(error)
-            return getFailedResponse("Something went wrong");
+            return null;
+        }
+    };
+
+    
+    static async add<T>(table: Table, model: T): Promise<void> {
+        try {
+            const { error } = await supabase
+                .from(table)
+                .insert(model)
+
+            if (!error) {
+                return;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            console.log(error)
+            return null;
         }
     };
 }

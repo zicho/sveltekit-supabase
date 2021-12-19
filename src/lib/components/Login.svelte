@@ -1,8 +1,11 @@
 <script lang="ts">
-	import { login, setUserAndSession, signedInUser } from '$lib/stores/UserStore';
+	import { setUserAndSession, signedInUser } from '$lib/stores/UserStore';
 	import { createEventDispatcher } from 'svelte';
 	import { LoginUserModel } from '$lib/models/user/LoginUserModel';
-	import { addToast } from "as-toast"
+	import { addToast } from 'as-toast';
+	import type { ServiceResponse } from '$lib/models/ServiceResponse';
+	import type { Session } from '@supabase/supabase-js';
+	import type { UserProfileModel } from '$lib/models/user/UserProfileModel';
 	let loading: boolean = false;
 	let loginUserModel: LoginUserModel = new LoginUserModel();
 
@@ -13,19 +16,22 @@
 		loading = true;
 
 		try {
-			const res = await login(loginUserModel);
+			const res = await fetch('api/user/login', {
+				method: 'POST',
+				body: JSON.stringify(loginUserModel)
+			});
 
-			console.dir("-----------------")
-			console.dir(res.data.userProfileModel.data)
-			console.dir("-----------------")
+			let data = (await res.json()) as ServiceResponse<{
+				session: Session;
+				userProfileModel: UserProfileModel;
+			}>;
 
-			if (res.success) {
-				setUserAndSession(res.data.session, res.data.userProfileModel.data);
-				addToast("Welcome " + $signedInUser.username)
+			if (data.success) {
+				setUserAndSession(data.data.session, data.data.userProfileModel);
+				addToast('Welcome ' + $signedInUser.username);
 				dispatch('success');
-				
 			} else {
-				error = res.message;
+				error = data.message;
 			}
 		} catch (err) {
 			error = err;

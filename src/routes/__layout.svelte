@@ -35,13 +35,18 @@
 <script lang="ts">
 	import '../app.css';
 	import { session } from '$app/stores';
-	import { logout, signedInUser } from '$lib/stores/UserStore';
+	import { signedInUser } from '$lib/stores/UserStore';
 	import { goto } from '$app/navigation';
+	import type { ServiceResponse } from '$lib/models/ServiceResponse';
 
 	async function onLogoutClicked() {
-		const res = await logout();
+		const res = await fetch('api/user/logout', {
+			method: 'POST'
+		});
 
-		if (res.success) {
+		let data = (await res.json()) as ServiceResponse<void>;
+
+		if (data.success) {
 			$session = null;
 			$signedInUser = null;
 			goto('/');

@@ -1,3 +1,4 @@
+import { ErrorMessages } from "./core/Messages";
 
 export class ServiceResponse<T> {
 
@@ -13,7 +14,7 @@ export class ServiceResponse<T> {
 }
 
 export function getFailedResponse(error?: string) {
-    return new ServiceResponse(error == undefined ? 'There was an error processing this request' : error, false)
+    return new ServiceResponse(error == undefined ? ErrorMessages.GenericError : error, false)
 }
 
 export function getSuccessResponse<T>(data?: T) {
