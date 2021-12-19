@@ -6,8 +6,6 @@ export async function get() {
 
     const data = await RepositoryBase.getAll<UserProfileModel>(Table.Profiles);
 
-    console.dir(data)
-
     return {
         status: 200,
         body: getSuccessResponse(data),

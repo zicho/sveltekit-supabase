@@ -37,7 +37,6 @@
 				addToast('Welcome ' + $signedInUser.username);
 				dispatch('success');
 			} else {
-				console.dir(data)
 				error = data.message;
 			}
 		} catch (err) {

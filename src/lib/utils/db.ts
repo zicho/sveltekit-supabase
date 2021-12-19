@@ -1,4 +1,3 @@
-import type { UserProfileModel } from '$lib/models/user/UserProfileModel'
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string

@@ -1,14 +1,11 @@
 <script lang="ts" context="module">
 	import type { UserProfileModel } from '$lib/models/user/UserProfileModel';
 	import type { ServiceResponse } from '$lib/models/ServiceResponse';
-import { onMount } from 'svelte';
 
 	export async function load({ fetch }) {
 		try {
 			var res = await fetch('api/user/getAll');
 			var data = (await res.json()) as ServiceResponse<UserProfileModel[]>;
-
-			console.dir(data)
 
 			return {
 				status: 200,

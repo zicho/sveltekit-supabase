@@ -42,7 +42,6 @@ export abstract class RepositoryBase {
         }
     };
 
-    
     static async add<T>(table: Table, model: T): Promise<void> {
         try {
             const { error } = await supabase

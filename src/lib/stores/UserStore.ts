@@ -1,48 +1,12 @@
 import { writable } from 'svelte/store';
-import type { ServiceResponse } from "$lib/models/ServiceResponse";
-import type { LoginUserModel } from "$lib/models/user/LoginUserModel";
-import type { RegisterUserModel } from "$lib/models/user/RegisterUserModel";
-import { post } from "$lib/utils/EndpointClient";
 import type { Session } from "@supabase/gotrue-js";
 import cookie from 'cookie'
 import type { UserProfileModel } from '$lib/models/user/UserProfileModel';
 import { session } from '$app/stores';
 import { browser } from '$app/env';
 
-//export const signedInUser = writable<UserProfileModel>(null)
 export const signedInUser = writable<UserProfileModel>(getUserFromStorage());
 signedInUser.subscribe(val => setUserInLocalStorage(val));
-
-// export async function register(user: RegisterUserModel): Promise<ServiceResponse<{ session: Session, userProfileModel: UserProfileModel }>> {
-
-//     try {
-//         let res = await post<RegisterUserModel, { session: Session, userProfileModel: UserProfileModel }>('api/user/register', user);
-
-//         return res;
-
-//     } catch (err) {
-//         console.log(err);
-//     }
-// }
-
-// export async function logout(): Promise<ServiceResponse<void>> {
-
-//     try {
-//         // ;
-//         return await post('api/user/logout');
-//     } catch (err) {
-//         console.log(err);
-//     }
-// }
-
-// export async function profile(username: string): Promise<ServiceResponse<UserProfileModel>> {
-//     try {
-//         var res = await get<UserProfileModel>('api/user/' + username);
-//         return res;
-//     } catch (err) {
-//         console.log(err);
-//     }
-// }
 
 export function setSessionHeaders(session: Session) {
     return {
@@ -60,11 +24,8 @@ export function setSessionHeaders(session: Session) {
 
 export function setUserAndSession(s: Session, userProfileModel: UserProfileModel) {
     session.set(s);
-    console.dir(userProfileModel)
-    console.log("SETTING!")
     signedInUser.set(userProfileModel);
 }
-
 
 export function clearSessionHeaders() {
     console.log("clearing cookie")
@@ -77,12 +38,10 @@ function getUserFromStorage(): UserProfileModel {
     if (browser) {
         return JSON.parse(localStorage.getItem("user")) || null
     }
-
 }
+
 function setUserInLocalStorage(val: UserProfileModel): void {
-    if(browser) {
+    if (browser) {
         localStorage.setItem("user", JSON.stringify(val))
     }
-    
 }
-

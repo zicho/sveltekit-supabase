@@ -5,20 +5,22 @@
 		let slug = page.params.slug;
 
 		try {
-			var res = await fetch('api/user/profile/' + slug);
-			var data = (await res.json()) as ServiceResponse<UserProfileModel>;
+			var res = await fetch('/api/user/' + slug);
+			var data = await res.json() as ServiceResponse<UserProfileModel>;
+
+			return {
+				status: 200,
+				props: {
+					user: data.data
+				}
+			};
 		} catch (err) {
 			console.log(err);
+
+			return {
+				status: 500
+			};
 		}
-
-		
-
-		return {
-			status: 200,
-			props: {
-				user: data.data
-			}
-		};
 	}
 </script>
 
