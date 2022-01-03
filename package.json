@@ -42,6 +42,7 @@
 		"daisyui": "^1.16.2",
 		"js-cookie": "^3.0.1",
 		"svelte-fa": "^2.4.0",
-		"svelte-kit": "^1.0.0"
+		"svelte-kit": "^1.0.0",
+		"svelte-toasts": "^1.1.2"
 	}
 }

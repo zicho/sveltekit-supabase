@@ -28,7 +28,7 @@
 	// onMount(() => console.dir(users.data))
 </script>
 
-<h1>You are logged in.</h1>
+<h1 class="margin-bottom-l">You are logged in.</h1>
 
 <ul>
 	{#each users as u}

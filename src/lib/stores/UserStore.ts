@@ -7,11 +7,14 @@ import { browser } from '$app/env';
 import { supabase } from '$lib/utils/db';
 import type { RealtimeSubscription } from '@supabase/supabase-js';
 import { addToast } from 'as-toast';
+import { toast } from '$lib/utils/ToastHandler';
+import { ToastTitles } from '$lib/models/core/Messages';
+import { Table } from '$lib/utils/repositories/RepositoryBase';
 
 export const signedInUser = writable<UserProfileModel>(getUserFromStorage());
 signedInUser.subscribe(val => setUserInLocalStorage(val));
 
-let subscription: RealtimeSubscription;
+let messageSubscription: RealtimeSubscription;
 
 export function setSessionHeaders(session: Session) {
     return {
@@ -31,18 +34,19 @@ export function setUserAndSession(s: Session, userProfileModel: UserProfileModel
     session.set(s);
     signedInUser.set(userProfileModel);
 
-    subscription = supabase
-        .from(`private_messages:to=eq.${userProfileModel.username}`)
-        // .on('INSERT', () => addToast('You have received a PM'))
-        //.from('private_messages')
-        .on('INSERT', () => console.log("realtime test"))
-        .subscribe();
+    handleSubscriptions(userProfileModel.username);
 }
 
-export function clearUserAndSession() {
+export function logout() {
+    clearUserAndSession();
+    supabase.removeSubscription(messageSubscription);
+}
+
+function clearUserAndSession() {
     try {
         session.set(null);
         signedInUser.set(new UserProfileModel());
+        localStorage.removeItem("user")
     } catch (err) {
         console.log(err)
     }
@@ -58,7 +62,15 @@ export function clearSessionHeaders() {
 
 function getUserFromStorage(): UserProfileModel {
     if (browser) {
-        return JSON.parse(localStorage.getItem("user")) || new UserProfileModel()
+        var user = JSON.parse(localStorage.getItem("user"));
+
+        if(user) {
+            console.dir(user)
+            // handleSubscriptions(user.username);
+            return user;
+        } 
+
+        return new UserProfileModel();
     }
 }
 
@@ -67,3 +79,13 @@ function setUserInLocalStorage(val: UserProfileModel): void {
         localStorage.setItem("user", JSON.stringify(val))
     }
 }
+
+
+function handleSubscriptions(username: string) {
+    
+    messageSubscription = supabase
+        .from(`${Table.Messages}:to=eq.${username}`)
+        .on('INSERT', payload => toast(payload.new.content, `${ToastTitles.PrivateMessage} ${payload.new.from}`))
+        .subscribe();
+}
+

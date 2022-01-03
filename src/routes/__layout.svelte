@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-	import { Toasts } from 'as-toast';
+	import { ToastContainer, FlatToast }  from "svelte-toasts";
 	import Fa from 'svelte-fa';
 	import { faUser } from '@fortawesome/free-solid-svg-icons';
 	let nonProtectedRoutes: string[] = ['/about'];
@@ -35,21 +35,24 @@
 <script lang="ts">
 	import '../app.css';
 	import { session } from '$app/stores';
-	import { clearUserAndSession, signedInUser } from '$lib/stores/UserStore';
-	import { goto } from '$app/navigation';
-	import type { ServiceResponse } from '$lib/models/ServiceResponse';
+	import { logout, signedInUser } from '$lib/stores/UserStore';
+import { toast } from '$lib/utils/ToastHandler';
 
 	async function onLogoutClicked() {
-		// $session = null;
-		// $signedInUser = null;
-
 		const res = await fetch('/api/user/logout', {
 			method: 'POST'
-		}).finally(() => clearUserAndSession());
+		}).finally(() => logout());
+	}
+
+	function testFunction() {
+		toast("I am a toaster", "Title");
 	}
 </script>
 
-<Toasts /> 
+<ToastContainer placement="bottom-right" let:data={data}>
+    <FlatToast {data} /> <!-- Provider template for your toasts -->
+  </ToastContainer>
+
 
 <div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content">
 	<div class="flex-none px-2 mx-2">
@@ -66,8 +69,12 @@
 		{/if}
 	</div>
 
+
+
 	<div class="flex-none">
 		{#if $session}
+			<!-- svelte-ignore missing-declaration -->
+			<span on:click={testFunction} class="btn btn-ghost btn-sm rounded-btn">TEST BUTTON</span>
 			<span on:click={onLogoutClicked} class="btn btn-ghost btn-sm rounded-btn">Log Out</span>
 		{:else}
 			<a href="/register" class="btn btn-ghost btn-sm rounded-btn">Register</a>
