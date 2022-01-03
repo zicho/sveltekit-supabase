@@ -35,26 +35,21 @@
 <script lang="ts">
 	import '../app.css';
 	import { session } from '$app/stores';
-	import { signedInUser } from '$lib/stores/UserStore';
+	import { clearUserAndSession, signedInUser } from '$lib/stores/UserStore';
 	import { goto } from '$app/navigation';
 	import type { ServiceResponse } from '$lib/models/ServiceResponse';
 
 	async function onLogoutClicked() {
-		const res = await fetch('api/user/logout', {
+		// $session = null;
+		// $signedInUser = null;
+
+		const res = await fetch('/api/user/logout', {
 			method: 'POST'
-		});
-
-		let data = (await res.json()) as ServiceResponse<void>;
-
-		if (data.success) {
-			$session = null;
-			$signedInUser = null;
-			goto('/');
-		}
+		}).finally(() => clearUserAndSession());
 	}
 </script>
 
-<Toasts />
+<Toasts /> 
 
 <div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content">
 	<div class="flex-none px-2 mx-2">

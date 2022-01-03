@@ -1,5 +1,4 @@
 import { supabase } from "../db";
-import { getFailedResponse, getSuccessResponse, ServiceResponse } from "$lib/models/ServiceResponse";
 
 export enum Table {
     Profiles = 'profiles',
@@ -17,6 +16,7 @@ export abstract class RepositoryBase {
             if (!error) {
                 return data[0]
             } else {
+                console.log(error)
                 return null;
             }
         } catch (error) {
@@ -51,6 +51,7 @@ export abstract class RepositoryBase {
             if (!error) {
                 return;
             } else {
+                console.log(error.message)
                 return null;
             }
         } catch (error) {

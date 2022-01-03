@@ -19,9 +19,11 @@ export async function post(request: { body: string }) {
 
         let userProfileModel = await UserRepository.profileById(session.user.id);
 
+
+
         return {
             status: 200,
-            body: getSuccessResponse({session, userProfileModel}),
+            body: getSuccessResponse({ session, userProfileModel }),
             headers: setSessionHeaders(session)
         };
 

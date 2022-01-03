@@ -14,8 +14,11 @@ export async function post() {
             };
         }
 
+        
+
         return {
-            status: 200,
+            status: 302,
+            redirect: '/login',
             body: getSuccessResponse(),
             headers: clearSessionHeaders()
         };

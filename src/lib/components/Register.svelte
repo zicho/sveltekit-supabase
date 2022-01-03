@@ -34,7 +34,7 @@
 
 			if (data.success) {
 				setUserAndSession(data.data.session, data.data.userProfileModel);
-				addToast('Welcome ' + $signedInUser.username);
+				// addToast('Welcome ' + $signedInUser.username);
 				dispatch('success');
 			} else {
 				error = data.message;

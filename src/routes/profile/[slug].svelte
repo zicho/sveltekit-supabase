@@ -1,17 +1,17 @@
 <script lang="ts" context="module">
 	import type { UserProfileModel } from '$lib/models/user/UserProfileModel';
-	import type { ServiceResponse } from '$lib/models/ServiceResponse';
+
+
+
 	export async function load({ page }) {
 		let slug = page.params.slug;
 
 		try {
-			var res = await fetch('/api/user/' + slug);
-			var data = await res.json() as ServiceResponse<UserProfileModel>;
-
+			var res = await UserRepository.profile(slug);
 			return {
 				status: 200,
 				props: {
-					user: data.data
+					user: res
 				}
 			};
 		} catch (err) {
@@ -27,10 +27,20 @@
 <script lang="ts">
 	import SendPrivateMessage from '$lib/components/SendPrivateMessage.svelte';
 	import { signedInUser } from '$lib/stores/UserStore';
+	import { UserRepository } from '$lib/utils/repositories/UserRepository';
+	import { onMount } from 'svelte';
+	import { supabase } from '$lib/utils/db';
+	let mounted = false;
 
 	export let user: UserProfileModel;
+
+	onMount(() => {
+
+		mounted = true;
+	});
 </script>
 
 <h1>Profile of {user.username}</h1>
 
-<SendPrivateMessage sender={$signedInUser.username} recipient={user.username} />
+
+	<SendPrivateMessage sender={$signedInUser.username} recipient={user.username} />
