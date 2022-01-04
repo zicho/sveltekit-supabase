@@ -9,6 +9,7 @@ import type { RealtimeSubscription } from '@supabase/supabase-js';
 import { toast } from '$lib/utils/ToastHandler';
 import { ToastTitles } from '$lib/models/core/Messages';
 import { Table } from '$lib/utils/repositories/RepositoryBase';
+import { getUnreadCount, handleIncomingMessage, unreadMessages } from './MessageStore';
 
 export const signedInUser = writable<UserProfileModel>(getUserFromStorage());
 signedInUser.subscribe(val => setUserInLocalStorage(val));
@@ -32,6 +33,7 @@ export function setSessionHeaders(session: Session) {
 export function setUserAndSession(s: Session, userProfileModel: UserProfileModel) {
     session.set(s);
     signedInUser.set(userProfileModel);
+    getUnreadCount(userProfileModel.username);
 
     clearSubscriptions();
     activateSubscriptions(userProfileModel.username);
@@ -46,6 +48,7 @@ function clearUserAndSession() {
     try {
         session.set(null);
         signedInUser.set(new UserProfileModel());
+        unreadMessages.set(0);
         localStorage.removeItem("user")
     } catch (err) {
         console.log(err)
@@ -66,7 +69,11 @@ function getUserFromStorage(): UserProfileModel {
 
         if (user) {
             console.log("user retrieved")
-            if (browser) activateSubscriptions('datanist')
+            if (browser) {
+                activateSubscriptions(user.username);
+                getUnreadCount(user.username);
+            }
+            
             return user;
         }
 
@@ -86,7 +93,7 @@ export function activateSubscriptions(username: string) {
     try {
         messageSubscription = supabase
         .from(`${Table.Messages}:to=eq.${username}`)
-        .on('INSERT', payload => toast(payload.new.content, `${ToastTitles.PrivateMessageFrom} ${payload.new.from}`))
+        .on('INSERT', payload => handleIncomingMessage(payload))
         .subscribe();
     } catch (err) {
         console.log("Could not activate subscriptions: " + err)

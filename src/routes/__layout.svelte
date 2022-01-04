@@ -19,7 +19,6 @@
 					redirect: '/login'
 				};
 		} else {
-
 			if (nonAuthedRoutes.includes(path)) {
 				return {
 					status: 302,
@@ -27,7 +26,7 @@
 				};
 			}
 
-			activateSubscriptions('datanist')
+			activateSubscriptions('datanist');
 
 			return {
 				status: 200
@@ -41,6 +40,7 @@
 	import { session } from '$app/stores';
 	import { activateSubscriptions, logout, signedInUser } from '$lib/stores/UserStore';
 	import { toast } from '$lib/utils/ToastHandler';
+import { getUnreadCount, unreadMessages } from '$lib/stores/MessageStore';
 
 	async function onLogoutClicked() {
 		const res = await fetch('/api/user/logout', {
@@ -49,7 +49,7 @@
 	}
 
 	function testFunction() {
-		toast('I am a toaster', 'Title');
+		getUnreadCount('datanist')
 	}
 </script>
 
@@ -72,7 +72,7 @@
 			</div>
 			<div class="items-stretch hidden lg:flex">
 				<a href="/inbox/" class="btn btn-ghost btn-sm rounded-btn"
-					><Fa class="margin-right-s" icon={faEnvelope} />Inbox</a
+					><Fa class="margin-right-s" icon={faEnvelope} />Inbox {#if $unreadMessages > 0}({$unreadMessages}){/if}</a
 				>
 			</div>
 		{/if}
