@@ -26,8 +26,6 @@
 				};
 			}
 
-			activateSubscriptions('datanist');
-
 			return {
 				status: 200
 			};
@@ -39,8 +37,7 @@
 	import '../app.css';
 	import { session } from '$app/stores';
 	import { activateSubscriptions, logout, signedInUser } from '$lib/stores/UserStore';
-	import { toast } from '$lib/utils/ToastHandler';
-import { getUnreadCount, unreadMessages } from '$lib/stores/MessageStore';
+	import { unreadMessages } from '$lib/stores/MessageStore';
 
 	async function onLogoutClicked() {
 		const res = await fetch('/api/user/logout', {
@@ -49,7 +46,7 @@ import { getUnreadCount, unreadMessages } from '$lib/stores/MessageStore';
 	}
 
 	function testFunction() {
-		getUnreadCount('datanist')
+		alert('test');
 	}
 </script>
 

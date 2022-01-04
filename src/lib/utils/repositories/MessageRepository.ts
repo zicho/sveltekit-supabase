@@ -4,6 +4,9 @@ import { RepositoryBase, Table } from "./RepositoryBase";
 export abstract class MessageRepository extends RepositoryBase {
 
     static async getUnreadCount(username: string): Promise<number> {
+
+        
+
         try {
             const { error, count } = await supabase
                 .from(Table.Messages)
@@ -12,6 +15,7 @@ export abstract class MessageRepository extends RepositoryBase {
                 .eq('isRead', false);
 
             if (!error) {
+                console.log("messages for " + username + ": " + count)
                 return count
             } else {
                 return 0
