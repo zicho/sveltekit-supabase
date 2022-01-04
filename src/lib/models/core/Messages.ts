@@ -3,5 +3,5 @@ export enum ErrorMessages {
 }
 
 export enum ToastTitles {
-    PrivateMessage = "Private message from"
+    PrivateMessageFrom = "Private message from",
 }

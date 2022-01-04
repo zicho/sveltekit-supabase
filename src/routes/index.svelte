@@ -24,8 +24,6 @@
 
 <script lang="ts">
 	export let users: UserProfileModel[];
-
-	// onMount(() => console.dir(users.data))
 </script>
 
 <h1 class="margin-bottom-l">You are logged in.</h1>

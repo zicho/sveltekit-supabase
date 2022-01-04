@@ -1,15 +1,15 @@
 <script lang="ts" context="module">
-	import { ToastContainer, FlatToast }  from "svelte-toasts";
+	import { ToastContainer, FlatToast } from 'svelte-toasts';
 	import Fa from 'svelte-fa';
-	import { faUser } from '@fortawesome/free-solid-svg-icons';
-	let nonProtectedRoutes: string[] = ['/about'];
+	import { faEnvelope, faUser } from '@fortawesome/free-solid-svg-icons';
+	let publicRoutes: string[] = ['/about'];
 	let nonAuthedRoutes: string[] = ['/login', '/register'];
 
 	export async function load({ session, page }) {
 		let path: string = page.path;
 
 		if (!session) {
-			if (nonProtectedRoutes.includes(path) || nonAuthedRoutes.includes(path)) {
+			if (publicRoutes.includes(path) || nonAuthedRoutes.includes(path)) {
 				return {
 					status: 200
 				};
@@ -19,12 +19,16 @@
 					redirect: '/login'
 				};
 		} else {
+
 			if (nonAuthedRoutes.includes(path)) {
 				return {
 					status: 302,
 					redirect: '/'
 				};
 			}
+
+			activateSubscriptions('datanist')
+
 			return {
 				status: 200
 			};
@@ -35,8 +39,8 @@
 <script lang="ts">
 	import '../app.css';
 	import { session } from '$app/stores';
-	import { logout, signedInUser } from '$lib/stores/UserStore';
-import { toast } from '$lib/utils/ToastHandler';
+	import { activateSubscriptions, logout, signedInUser } from '$lib/stores/UserStore';
+	import { toast } from '$lib/utils/ToastHandler';
 
 	async function onLogoutClicked() {
 		const res = await fetch('/api/user/logout', {
@@ -45,14 +49,14 @@ import { toast } from '$lib/utils/ToastHandler';
 	}
 
 	function testFunction() {
-		toast("I am a toaster", "Title");
+		toast('I am a toaster', 'Title');
 	}
 </script>
 
-<ToastContainer placement="bottom-right" let:data={data}>
-    <FlatToast {data} /> <!-- Provider template for your toasts -->
-  </ToastContainer>
-
+<ToastContainer placement="bottom-right" let:data>
+	<FlatToast {data} />
+	<!-- Provider template for your toasts -->
+</ToastContainer>
 
 <div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content">
 	<div class="flex-none px-2 mx-2">
@@ -66,10 +70,13 @@ import { toast } from '$lib/utils/ToastHandler';
 					><Fa class="margin-right-s" icon={faUser} />{$signedInUser.username}</a
 				>
 			</div>
+			<div class="items-stretch hidden lg:flex">
+				<a href="/inbox/" class="btn btn-ghost btn-sm rounded-btn"
+					><Fa class="margin-right-s" icon={faEnvelope} />Inbox</a
+				>
+			</div>
 		{/if}
 	</div>
-
-
 
 	<div class="flex-none">
 		{#if $session}

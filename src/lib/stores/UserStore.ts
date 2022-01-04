@@ -6,7 +6,6 @@ import { session } from '$app/stores';
 import { browser } from '$app/env';
 import { supabase } from '$lib/utils/db';
 import type { RealtimeSubscription } from '@supabase/supabase-js';
-import { addToast } from 'as-toast';
 import { toast } from '$lib/utils/ToastHandler';
 import { ToastTitles } from '$lib/models/core/Messages';
 import { Table } from '$lib/utils/repositories/RepositoryBase';
@@ -14,7 +13,7 @@ import { Table } from '$lib/utils/repositories/RepositoryBase';
 export const signedInUser = writable<UserProfileModel>(getUserFromStorage());
 signedInUser.subscribe(val => setUserInLocalStorage(val));
 
-let messageSubscription: RealtimeSubscription;
+var messageSubscription: RealtimeSubscription;
 
 export function setSessionHeaders(session: Session) {
     return {
@@ -34,12 +33,13 @@ export function setUserAndSession(s: Session, userProfileModel: UserProfileModel
     session.set(s);
     signedInUser.set(userProfileModel);
 
-    handleSubscriptions(userProfileModel.username);
+    clearSubscriptions();
+    activateSubscriptions(userProfileModel.username);
 }
 
 export function logout() {
     clearUserAndSession();
-    supabase.removeSubscription(messageSubscription);
+    clearSubscriptions();
 }
 
 function clearUserAndSession() {
@@ -64,28 +64,42 @@ function getUserFromStorage(): UserProfileModel {
     if (browser) {
         var user = JSON.parse(localStorage.getItem("user"));
 
-        if(user) {
-            console.dir(user)
-            // handleSubscriptions(user.username);
+        if (user) {
+            console.log("user retrieved")
+            if (browser) activateSubscriptions('datanist')
             return user;
-        } 
+        }
 
         return new UserProfileModel();
     }
 }
 
-function setUserInLocalStorage(val: UserProfileModel): void {
+function setUserInLocalStorage(user: UserProfileModel): void {
     if (browser) {
-        localStorage.setItem("user", JSON.stringify(val))
+        localStorage.setItem("user", JSON.stringify(user))
     }
 }
 
+export function activateSubscriptions(username: string) {
+    clearSubscriptions();
 
-function handleSubscriptions(username: string) {
-    
-    messageSubscription = supabase
+    try {
+        messageSubscription = supabase
         .from(`${Table.Messages}:to=eq.${username}`)
-        .on('INSERT', payload => toast(payload.new.content, `${ToastTitles.PrivateMessage} ${payload.new.from}`))
+        .on('INSERT', payload => toast(payload.new.content, `${ToastTitles.PrivateMessageFrom} ${payload.new.from}`))
         .subscribe();
+    } catch (err) {
+        console.log("Could not activate subscriptions: " + err)
+    }
+    
+}
+
+function clearSubscriptions() {
+    console.log("clearing all supabase subscriptions")
+
+    supabase.getSubscriptions().forEach(subscription => {
+        supabase.removeSubscription(subscription);
+    });
+
 }
 

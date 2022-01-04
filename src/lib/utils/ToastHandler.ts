@@ -1,5 +1,4 @@
-import { toasts, ToastContainer, FlatToast, BootstrapToast } from "svelte-toasts";
-import { addToast } from "as-toast";
+import { toasts } from "svelte-toasts";
 
 export const toast = (message: string, title?: string) => {
     toasts.add({
@@ -7,7 +6,7 @@ export const toast = (message: string, title?: string) => {
         description: message,
         duration: 4000, // 0 or negative to avoid auto-remove
         placement: 'bottom-right',
-        type: 'info',
+        type: 'success',
         theme: 'light'
     });
 };
