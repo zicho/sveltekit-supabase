@@ -3,7 +3,7 @@ import type { Tables } from "../DatabaseTypes";
 
 
 export abstract class RepositoryBase {
-    static async getSingle<T>(id: string, table: Tables):Promise<T>  {
+    static async getSingle<T>(id: string, table: Tables): Promise<T> {
         try {
             const { data, error } = await supabase
                 .from<T>(table)
@@ -56,4 +56,13 @@ export abstract class RepositoryBase {
             return null;
         }
     };
+
+    static async deleteRange(table: Tables, ids: number[]): Promise<void> {
+        ids.forEach(async id => {
+            const { data, error } = await supabase
+                .from(table)
+                .delete()
+                .match({ id: id })
+        });
+    }
 }

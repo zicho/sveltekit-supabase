@@ -30,13 +30,16 @@ export async function handleIncomingMessage(payload) {
 export async function markAllAsRead(username: string): Promise<ServiceResponse<void | unknown>> {
     try {
         await MessageRepository.markAllAsRead(username).then(async () =>
+
             await getUnreadCount(username)
         ).catch(err => {
+            console.log(err)
             return getFailedResponse(ErrorMessages.GenericError);
         });
         
         return getSuccessResponse();
-    } catch {
+    } catch(error) {
+        console.log(error);
         return getFailedResponse(ErrorMessages.GenericError);
     }
 }
