@@ -1,8 +1,9 @@
 import { getFailedResponse, getSuccessResponse } from "$lib/models/ServiceResponse";
 import type { RegisterUserModel } from "$lib/models/user/RegisterUserModel";
 import { setSessionHeaders } from "$lib/stores/UserStore";
+import { Tables } from "$lib/utils/DatabaseTypes";
 import { supabase } from "$lib/utils/db";
-import { RepositoryBase, Table } from "$lib/utils/repositories/RepositoryBase";
+import { RepositoryBase } from "$lib/utils/repositories/RepositoryBase";
 import { UserRepository } from "$lib/utils/repositories/UserRepository"
 // import type { supabase as types } from "C:\Dev\git\sveltekit-supabase\types\supabase"
 
@@ -26,7 +27,7 @@ export async function post(request: { body: string }) {
             };
         }
 
-        await RepositoryBase.add(Table.Profiles, {
+        await RepositoryBase.add(Tables.Profiles, {
             id: session.user.id,
             username: model.username,
             updated_at: session.user.created_at

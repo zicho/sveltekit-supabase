@@ -1,12 +1,9 @@
 import { supabase } from "../db";
+import type { Tables } from "../DatabaseTypes";
 
-export enum Table {
-    Profiles = 'profiles',
-    Messages = 'private_messages',
-}
 
 export abstract class RepositoryBase {
-    static async getSingle<T>(id: string, table: Table):Promise<T>  {
+    static async getSingle<T>(id: string, table: Tables):Promise<T>  {
         try {
             const { data, error } = await supabase
                 .from<T>(table)
@@ -25,7 +22,7 @@ export abstract class RepositoryBase {
         }
     };
 
-    static async getAll<T>(table: Table): Promise<T[]> {
+    static async getAll<T>(table: Tables): Promise<T[]> {
         try {
             const { data, error } = await supabase
                 .from<T>(table)
@@ -42,7 +39,7 @@ export abstract class RepositoryBase {
         }
     };
 
-    static async add<T>(table: Table, model: T): Promise<void> {
+    static async add<T>(table: Tables, model: T): Promise<void> {
         try {
             const { error } = await supabase
                 .from(table)

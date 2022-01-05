@@ -36,7 +36,7 @@
 <script lang="ts">
 	import '../app.css';
 	import { session } from '$app/stores';
-	import { activateSubscriptions, logout, signedInUser } from '$lib/stores/UserStore';
+	import { logout, signedInUser } from '$lib/stores/UserStore';
 	import { unreadMessages } from '$lib/stores/MessageStore';
 
 	async function onLogoutClicked() {
@@ -46,13 +46,12 @@
 	}
 
 	function testFunction() {
-		alert('test');
+		alert('please close me');
 	}
 </script>
 
 <ToastContainer placement="bottom-right" let:data>
 	<FlatToast {data} />
-	<!-- Provider template for your toasts -->
 </ToastContainer>
 
 <div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content">

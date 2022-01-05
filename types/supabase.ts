@@ -22,6 +22,8 @@ export interface paths {
           to?: parameters["rowFilter.private_messages.to"];
           title?: parameters["rowFilter.private_messages.title"];
           content?: parameters["rowFilter.private_messages.content"];
+          /** indicates if message has been opened/read */
+          isRead?: parameters["rowFilter.private_messages.isRead"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -78,6 +80,8 @@ export interface paths {
           to?: parameters["rowFilter.private_messages.to"];
           title?: parameters["rowFilter.private_messages.title"];
           content?: parameters["rowFilter.private_messages.content"];
+          /** indicates if message has been opened/read */
+          isRead?: parameters["rowFilter.private_messages.isRead"];
         };
         header: {
           /** Preference */
@@ -98,6 +102,8 @@ export interface paths {
           to?: parameters["rowFilter.private_messages.to"];
           title?: parameters["rowFilter.private_messages.title"];
           content?: parameters["rowFilter.private_messages.content"];
+          /** indicates if message has been opened/read */
+          isRead?: parameters["rowFilter.private_messages.isRead"];
         };
         body: {
           /** private_messages */
@@ -222,71 +228,115 @@ export interface paths {
 }
 
 export interface definitions {
-  /** Private messages sent between users */
+  /** @description Private messages sent between users */
   private_messages: {
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Primary Key.<pk/>
      */
     id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
     created_at?: string;
+    /** Format: character varying */
     from?: string;
+    /** Format: character varying */
     to?: string;
+    /** Format: character varying */
     title?: string;
+    /** Format: character varying */
     content?: string;
+    /**
+     * Format: boolean
+     * @description indicates if message has been opened/read
+     */
+    isRead: boolean;
   };
   profiles: {
     /**
-     * Note:
+     * Format: uuid
+     * @description Note:
      * This is a Primary Key.<pk/>
      */
     id: string;
+    /** Format: timestamp with time zone */
     updated_at?: string;
+    /** Format: text */
     username?: string;
+    /** Format: text */
     avatar_url?: string;
+    /** Format: text */
     website?: string;
-    /** A brief description of the user which can be edited by the owner and viewed by others */
+    /**
+     * Format: text
+     * @description A brief description of the user which can be edited by the owner and viewed by others
+     */
     description?: string;
   };
 }
 
 export interface parameters {
-  /** Preference */
+  /** @description Preference */
   preferParams: "params=single-object";
-  /** Preference */
+  /** @description Preference */
   preferReturn: "return=representation" | "return=minimal" | "return=none";
-  /** Preference */
+  /** @description Preference */
   preferCount: "count=none";
-  /** Filtering Columns */
+  /** @description Filtering Columns */
   select: string;
-  /** On Conflict */
+  /** @description On Conflict */
   on_conflict: string;
-  /** Ordering */
+  /** @description Ordering */
   order: string;
-  /** Limiting and Pagination */
+  /** @description Limiting and Pagination */
   range: string;
-  /** Limiting and Pagination */
+  /**
+   * @description Limiting and Pagination
+   * @default items
+   */
   rangeUnit: string;
-  /** Limiting and Pagination */
+  /** @description Limiting and Pagination */
   offset: string;
-  /** Limiting and Pagination */
+  /** @description Limiting and Pagination */
   limit: string;
-  /** private_messages */
+  /** @description private_messages */
   "body.private_messages": definitions["private_messages"];
+  /** Format: bigint */
   "rowFilter.private_messages.id": string;
+  /** Format: timestamp with time zone */
   "rowFilter.private_messages.created_at": string;
+  /** Format: character varying */
   "rowFilter.private_messages.from": string;
+  /** Format: character varying */
   "rowFilter.private_messages.to": string;
+  /** Format: character varying */
   "rowFilter.private_messages.title": string;
+  /** Format: character varying */
   "rowFilter.private_messages.content": string;
-  /** profiles */
+  /**
+   * Format: boolean
+   * @description indicates if message has been opened/read
+   */
+  "rowFilter.private_messages.isRead": string;
+  /** @description profiles */
   "body.profiles": definitions["profiles"];
+  /** Format: uuid */
   "rowFilter.profiles.id": string;
+  /** Format: timestamp with time zone */
   "rowFilter.profiles.updated_at": string;
+  /** Format: text */
   "rowFilter.profiles.username": string;
+  /** Format: text */
   "rowFilter.profiles.avatar_url": string;
+  /** Format: text */
   "rowFilter.profiles.website": string;
-  /** A brief description of the user which can be edited by the owner and viewed by others */
+  /**
+   * Format: text
+   * @description A brief description of the user which can be edited by the owner and viewed by others
+   */
   "rowFilter.profiles.description": string;
 }
 

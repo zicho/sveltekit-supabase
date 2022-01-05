@@ -1,6 +1,7 @@
 import type { PrivateMessageModel } from "$lib/models/messaging/PrivateMessageModel";
 import { getFailedResponse, getSuccessResponse } from "$lib/models/ServiceResponse";
-import { RepositoryBase, Table } from "$lib/utils/repositories/RepositoryBase";
+import { Tables } from "$lib/utils/DatabaseTypes";
+import { RepositoryBase } from "$lib/utils/repositories/RepositoryBase";
 
 export async function post(request: { body: string }) {
 
@@ -8,7 +9,7 @@ export async function post(request: { body: string }) {
 
     try {
         
-        await RepositoryBase.add(Table.Messages, model)
+        await RepositoryBase.add(Tables.Messages, model)
 
         return {
             status: 200,

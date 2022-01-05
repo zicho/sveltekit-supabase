@@ -6,10 +6,8 @@ import { session } from '$app/stores';
 import { browser } from '$app/env';
 import { supabase } from '$lib/utils/db';
 import type { RealtimeSubscription } from '@supabase/supabase-js';
-import { toast } from '$lib/utils/ToastHandler';
-import { ToastTitles } from '$lib/models/core/Messages';
-import { Table } from '$lib/utils/repositories/RepositoryBase';
-import { getUnreadCount, handleIncomingMessage, unreadMessages } from './MessageStore';
+import { handleIncomingMessage, unreadMessages, updateMessages } from './MessageStore';
+import { Tables } from '$lib/utils/DatabaseTypes';
 
 export const signedInUser = writable<UserProfileModel>(getUserFromStorage());
 signedInUser.subscribe(val => setUserInLocalStorage(val));
@@ -33,8 +31,9 @@ export function setSessionHeaders(session: Session) {
 export function setUserAndSession(s: Session, userProfileModel: UserProfileModel) {
     session.set(s);
     signedInUser.set(userProfileModel);
-    getUnreadCount(userProfileModel.username);
-
+    
+    updateMessages(userProfileModel.username);
+    
     clearSubscriptions();
     activateSubscriptions(userProfileModel.username);
 }
@@ -71,7 +70,7 @@ function getUserFromStorage(): UserProfileModel {
             console.log("user retrieved")
             if (browser) {
                 activateSubscriptions(user.username);
-                getUnreadCount(user.username);
+                updateMessages(user.username);
             }
             
             return user;
@@ -92,7 +91,7 @@ export function activateSubscriptions(username: string) {
 
     try {
         messageSubscription = supabase
-        .from(`${Table.Messages}:to=eq.${username}`)
+        .from(`${Tables.Messages}:to=eq.${username}`)
         .on('INSERT', payload => handleIncomingMessage(payload))
         .subscribe();
     } catch (err) {
