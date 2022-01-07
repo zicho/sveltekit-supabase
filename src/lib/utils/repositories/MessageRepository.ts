@@ -35,7 +35,6 @@ export abstract class MessageRepository extends RepositoryBase {
                 .eq('isRead', false);
 
             if (!error) {
-                console.log("messages for " + username + ": " + count)
                 return getSuccessResponse(count);
             } else {
                 return getFailedResponse();

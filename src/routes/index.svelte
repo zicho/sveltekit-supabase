@@ -24,13 +24,12 @@
 
 <script lang="ts">
 	export let users: UserProfileModel[];
-
-	console.dir(users)
 </script>
 
 <h1 class="margin-bottom-l">You are logged in.</h1>
 
 <ul>
+	Users:
 	{#each users as u}
 		<li>
 			<a href="profile/{u.username}">{u.username}</a>

@@ -19,8 +19,6 @@
 	};
 
 	async function onMarkAsReadClick() {
-		console.log('doing it');
-
 		var res = await markAsRead($signedInUser.username, getSelectedMessageIds());
 		if (res.success) {
 			await updateMessages($signedInUser.username);
@@ -35,7 +33,6 @@
 			let ids = $inbox.filter((m) => m.checked).map((m) => m.id);
 			await MessageRepository.deleteRange(Tables.Messages, getSelectedMessageIds());
 			await updateMessages($signedInUser.username);
-			console.log('delete finished');
 		} catch (err) {
 			console.log(err);
 		} finally {

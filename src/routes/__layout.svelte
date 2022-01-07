@@ -38,16 +38,23 @@
 	import { session } from '$app/stores';
 	import { logout, signedInUser } from '$lib/stores/UserStore';
 	import { unreadMessages } from '$lib/stores/MessageStore';
-	import { modalIsOpen, modalMessage, onModalConfirmAction, showModal } from '$lib/stores/ModalStore';
+	import {
+		modalIsOpen,
+		modalMessage,
+		onModalConfirmClicked,
+		showModal
+	} from '$lib/stores/ModalStore';
 
 	async function onLogoutClicked() {
-		const res = await fetch('/api/user/logout', {
-			method: 'POST'
-		}).finally(() => logout());
+		showModal('Do you want to logout?', async () => {
+			const res = await fetch('/api/user/logout', {
+				method: 'POST'
+			}).finally(() => logout());
+		});
 	}
 
 	function testFunction() {
-		showModal('All application data purged. Server will now reset.');
+		showModal('Kill signal received. All application data purged. Server will now reset.');
 	}
 </script>
 
@@ -113,8 +120,9 @@
 			{$modalMessage}
 		</p>
 		<div class="modal-action">
-			<a class="btn" on:click={() => ($modalIsOpen = false)}>Close</a>
-			<a class="btn btn-primary" on:click={() => $onModalConfirmAction}>Accept</a>
+			<!-- <a class="btn" on:click={() => ($modalIsOpen = false)}>Close</a> -->
+			<a class="btn btn-primary" on:click={() => onModalConfirmClicked()}>Yes</a>
+			<a class="btn btn-primary" on:click={() => ($modalIsOpen = false)}>Close</a>
 		</div>
 	</div>
 </div>
