@@ -38,6 +38,7 @@
 	import { session } from '$app/stores';
 	import { logout, signedInUser } from '$lib/stores/UserStore';
 	import { unreadMessages } from '$lib/stores/MessageStore';
+	import { modalIsOpen, modalMessage, onModalConfirmAction, showModal } from '$lib/stores/ModalStore';
 
 	async function onLogoutClicked() {
 		const res = await fetch('/api/user/logout', {
@@ -46,7 +47,7 @@
 	}
 
 	function testFunction() {
-		alert('please close me');
+		showModal('All application data purged. Server will now reset.');
 	}
 </script>
 
@@ -104,4 +105,16 @@
 
 <div class="container mx-auto">
 	<slot />
+</div>
+
+<div id="my-modal" class="modal" class:modal-open={$modalIsOpen}>
+	<div class="modal-box">
+		<p>
+			{$modalMessage}
+		</p>
+		<div class="modal-action">
+			<a class="btn" on:click={() => ($modalIsOpen = false)}>Close</a>
+			<a class="btn btn-primary" on:click={() => $onModalConfirmAction}>Accept</a>
+		</div>
+	</div>
 </div>
