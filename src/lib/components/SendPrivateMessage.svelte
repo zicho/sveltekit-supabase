@@ -21,6 +21,9 @@
 
 	async function onSubmit() {
 		try {
+
+			model.content = model.content.trim();
+
 			const res = await fetch('/api/message/send', {
 				method: 'POST',
 				body: JSON.stringify(model)
