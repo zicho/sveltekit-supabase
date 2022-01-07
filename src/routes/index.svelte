@@ -24,6 +24,8 @@
 
 <script lang="ts">
 	export let users: UserProfileModel[];
+
+	console.dir(users)
 </script>
 
 <h1 class="margin-bottom-l">You are logged in.</h1>

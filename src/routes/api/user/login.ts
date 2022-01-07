@@ -17,13 +17,12 @@ export async function post(request: { body: string }) {
             };
         }
 
-        let userProfileModel = await UserRepository.profileById(session.user.id);
-
-
+        let res = await UserRepository.profileById(session.user.id);
+        var profile = res.data;
 
         return {
             status: 200,
-            body: getSuccessResponse({ session, userProfileModel }),
+            body: getSuccessResponse({ session, profile }),
             headers: setSessionHeaders(session)
         };
 

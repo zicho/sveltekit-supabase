@@ -12,7 +12,7 @@ export async function get({ params }) {
 	
 		return {
 			status: 200,
-			body: getSuccessResponse(data),
+			body: data,
 		};
 	} catch {
 		return {

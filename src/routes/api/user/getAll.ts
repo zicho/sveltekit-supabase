@@ -9,6 +9,6 @@ export async function get() {
 
     return {
         status: 200,
-        body: getSuccessResponse(data),
+        body: data,
     };
 }

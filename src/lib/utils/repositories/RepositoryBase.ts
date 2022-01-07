@@ -1,9 +1,10 @@
 import { supabase } from "../db";
 import type { Tables } from "../DatabaseTypes";
+import { getFailedResponse, getSuccessResponse, ServiceResponse } from "$lib/models/ServiceResponse";
 
 
 export abstract class RepositoryBase {
-    static async getSingle<T>(id: string, table: Tables): Promise<T> {
+    static async getSingle<T>(id: string, table: Tables): Promise<ServiceResponse<T>> {
         try {
             const { data, error } = await supabase
                 .from<T>(table)
@@ -11,58 +12,66 @@ export abstract class RepositoryBase {
                 .match({ "id": id });
 
             if (!error) {
-                return data[0]
+                return getSuccessResponse(data[0]);
+
             } else {
-                console.log(error)
-                return null;
+                return getFailedResponse();
             }
         } catch (error) {
             console.log(error)
-            return null;
+            return getFailedResponse();
         }
     };
 
-    static async getAll<T>(table: Tables): Promise<T[]> {
+    static async getAll<T>(table: Tables): Promise<ServiceResponse<T[]>> {
         try {
             const { data, error } = await supabase
                 .from<T>(table)
                 .select("*")
 
             if (!error) {
-                return data;
+                return getSuccessResponse(data);
             } else {
-                return null;
+                console.log(error);
+                return getFailedResponse();
             }
         } catch (error) {
             console.log(error)
-            return null;
+            return getFailedResponse();
         }
     };
 
-    static async add<T>(table: Tables, model: T): Promise<void> {
+    static async add<T>(table: Tables, model: T): Promise<ServiceResponse<void>> {
         try {
             const { error } = await supabase
                 .from(table)
                 .insert(model)
 
             if (!error) {
-                return;
+                return getSuccessResponse();
             } else {
                 console.log(error.message)
-                return null;
+                return getFailedResponse();
             }
         } catch (error) {
             console.log(error)
-            return null;
+            return getFailedResponse();
         }
     };
 
-    static async deleteRange(table: Tables, ids: number[]): Promise<void> {
-        ids.forEach(async id => {
-            const { data, error } = await supabase
+    static async deleteRange(table: Tables, ids: number[]): Promise<ServiceResponse<void>> {
+        try {
+            const { error } = await supabase
                 .from(table)
                 .delete()
-                .match({ id: id })
-        });
+                .in('id', ids)
+
+            if (error) return getFailedResponse();
+
+            return getSuccessResponse();
+        } catch {
+            return getFailedResponse();
+        }
+
     }
 }

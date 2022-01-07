@@ -5,7 +5,7 @@ import type { UserProfileModel } from "$lib/models/user/UserProfileModel";
 
 export abstract class UserRepository extends RepositoryBase {
 
-    static async profile(username: string): Promise<UserProfileModel> {
+    static async profile(username: string): Promise<ServiceResponse<UserProfileModel>> {
         try {
             const { data, error } = await supabase
                 .from('profiles')
@@ -13,17 +13,17 @@ export abstract class UserRepository extends RepositoryBase {
                 .eq('username', username);
 
             if (!error) {
-                return data[0]
+                return getSuccessResponse(data[0]);
             } else {
-                return null
+                return getFailedResponse();
             }
         } catch (error) {
             console.log(error)
-            return null;
+            return getFailedResponse();
         }
     }
 
-    static async profileById(id: string): Promise<UserProfileModel> {
+    static async profileById(id: string): Promise<ServiceResponse<UserProfileModel>> {
         try {
             const { data, error } = await supabase
                 .from('profiles')
@@ -31,13 +31,13 @@ export abstract class UserRepository extends RepositoryBase {
                 .eq('id', id);
 
             if (!error) {
-                return data[0]
+                return getSuccessResponse(data[0]);
             } else {
-                return null;
+                return getFailedResponse();
             }
         } catch (error) {
             console.log(error)
-            return null;
+            return getFailedResponse();
         }
     }
 }

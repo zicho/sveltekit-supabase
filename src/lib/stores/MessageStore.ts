@@ -11,14 +11,31 @@ export let inbox = writable<PrivateMessageModel[]>();
 
 
 async function getUnreadCount(username: string) {
-    var data = await MessageRepository.getUnreadCount(username);
-    unreadMessages.set(data);
-    return data;
+    var res = await MessageRepository.getUnreadCount(username);
+
+    if (res.success) {
+        unreadMessages.set(res.data);
+        return res.data;
+    } else {
+        return null;
+    }
 }
 
 export async function updateMessages(username: string) {
-    await getUnreadCount(username);
-    inbox.set(await MessageRepository.getMessagesForUser(username))
+
+    try {
+        await getUnreadCount(username).then(async () => {
+
+            var res = await MessageRepository.getMessagesForUser(username);
+            if (res.success) {
+                inbox.set(res.data);
+            } else {
+
+            }
+        });
+    } catch {
+
+    }
 }
 
 
@@ -36,9 +53,9 @@ export async function markAllAsRead(username: string): Promise<ServiceResponse<v
             console.log(err)
             return getFailedResponse(ErrorMessages.GenericError);
         });
-        
+
         return getSuccessResponse();
-    } catch(error) {
+    } catch (error) {
         console.log(error);
         return getFailedResponse(ErrorMessages.GenericError);
     }

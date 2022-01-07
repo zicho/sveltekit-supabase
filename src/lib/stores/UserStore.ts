@@ -30,6 +30,7 @@ export function setSessionHeaders(session: Session) {
 
 export function setUserAndSession(s: Session, userProfileModel: UserProfileModel) {
     session.set(s);
+
     signedInUser.set(userProfileModel);
     
     updateMessages(userProfileModel.username);

@@ -10,7 +10,7 @@
 			return {
 				status: 200,
 				props: {
-					user: res
+					user: res.data
 				}
 			};
 		} catch (err) {
@@ -26,14 +26,9 @@
 <script lang="ts">
 	import SendPrivateMessage from '$lib/components/SendPrivateMessage.svelte';
 	import { signedInUser } from '$lib/stores/UserStore';
-	import { browser } from '$app/env';
 
 	export let user: UserProfileModel;
 	let showMessageModal: boolean = false;
-
-	const click = () => {
-		alert($signedInUser.username)
-	}
 </script>
 
 <h1>Profile of {user.username}</h1>

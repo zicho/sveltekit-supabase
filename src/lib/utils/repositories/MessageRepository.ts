@@ -3,9 +3,10 @@ import { RepositoryBase } from "./RepositoryBase";
 import type { definitions } from "../../../../types/supabase"
 import { Tables } from "../DatabaseTypes";
 import type { PrivateMessageModel } from "$lib/models/messaging/PrivateMessageModel";
+import { getFailedResponse, getSuccessResponse, ServiceResponse } from "$lib/models/ServiceResponse";
 
 export abstract class MessageRepository extends RepositoryBase {
-    static async markAllAsRead(username: string) {
+    static async markAllAsRead(username: string): Promise<ServiceResponse<void>> {
         try {
             const { error } = await supabase
                 .from<definitions[Tables.Messages]>(Tables.Messages)
@@ -15,13 +16,17 @@ export abstract class MessageRepository extends RepositoryBase {
 
             if (error) {
                 console.log(error)
+                return getFailedResponse();
             }
+
+            return getSuccessResponse();
         } catch (error) {
             console.log(error)
+            return getFailedResponse();
         }
     }
 
-    static async getUnreadCount(username: string): Promise<number> {
+    static async getUnreadCount(username: string): Promise<ServiceResponse<number>> {
         try {
             const { error, count } = await supabase
                 .from<definitions[Tables.Messages]>(Tables.Messages)
@@ -31,17 +36,17 @@ export abstract class MessageRepository extends RepositoryBase {
 
             if (!error) {
                 console.log("messages for " + username + ": " + count)
-                return count
+                return getSuccessResponse(count);
             } else {
-                return 0
+                return getFailedResponse();
             }
         } catch (error) {
             console.log(error)
-            return 0;
+            return getFailedResponse();
         }
     }
 
-    static async getMessagesForUser(username: string): Promise<PrivateMessageModel[]> {
+    static async getMessagesForUser(username: string): Promise<ServiceResponse<PrivateMessageModel[]>> {
         try {
             const { error, data } = await supabase
                 .from<definitions[Tables.Messages]>(Tables.Messages)
@@ -49,13 +54,13 @@ export abstract class MessageRepository extends RepositoryBase {
                 .eq('to', username);
 
             if (!error) {
-                return data as PrivateMessageModel[]
+                return getSuccessResponse(data as PrivateMessageModel[]);
             } else {
-                return null
+                return getFailedResponse();
             }
         } catch (error) {
             console.log(error)
-            return null;
+            return getFailedResponse();
         }
     }
 }
