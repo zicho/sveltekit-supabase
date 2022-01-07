@@ -3,13 +3,7 @@
 
 ### Basic architecture
 
-I have tried to separate client and server logic as much as possible. The basic idea is that the client should _never_ directly communicate with any endpoint (at all).
-
-This shall be the responsibility of the "Services" (perhaps it would be more prudent to call them controllers, though)
-
-So basically: 
-
-<code>Client -> Service -> Endpoint -> Supabase.</code>
+I have tried to separate client and server logic as much as possible. That's it for now. 
 
 # Why? #
 
