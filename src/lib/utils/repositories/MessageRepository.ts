@@ -6,13 +6,13 @@ import type { PrivateMessageModel } from "$lib/models/messaging/PrivateMessageMo
 import { getFailedResponse, getSuccessResponse, ServiceResponse } from "$lib/models/ServiceResponse";
 
 export abstract class MessageRepository extends RepositoryBase {
-    static async markAllAsRead(username: string): Promise<ServiceResponse<void>> {
+    static async markAsRead(username: string, ids: number[]): Promise<ServiceResponse<void>> {
         try {
             const { error } = await supabase
                 .from<definitions[Tables.Messages]>(Tables.Messages)
                 .update({ isRead: true })
                 .eq('to', username)
-                .eq('isRead', false);
+                .in('id', ids)
 
             if (error) {
                 console.log(error)

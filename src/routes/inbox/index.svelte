@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { signedInUser } from '$lib/stores/UserStore';
-	import { inbox, markAllAsRead, updateMessages } from '$lib/stores/MessageStore';
+	import { inbox, markAsRead, updateMessages } from '$lib/stores/MessageStore';
 	import { browser } from '$app/env';
 	import { toast } from '$lib/utils/ToastHandler';
 	import { MessageRepository } from '$lib/utils/repositories/MessageRepository';
@@ -8,13 +8,20 @@
 
 	let markAllChecked: boolean, deleteInProgress: boolean;
 
-	$: deleteEnabled = $inbox ? $inbox.filter((m) => m.checked).map((m) => m.id).length != 0 : false;
-	$: markAllReadEnabled = $inbox ? $inbox.filter((m) => !m.isRead).map((m) => m.id).length != 0 : false;
-	
-	async function onMarkAllAsReadClick() {
+	$: deleteButtonEnabled = $inbox ? $inbox.filter((m) => m.checked).map((m) => m.id).length != 0 : false;
+	$: markAllReadButtonEnabled = $inbox
+		? $inbox.filter((m) => !m.isRead).map((m) => m.id).length != 0
+		: false;
+
+	function getSelectedMessageIds(): number[] {
+		if ($inbox) return $inbox.filter((m) => m.checked).map((m) => m.id);
+		else return null;
+	};
+
+	async function onMarkAsReadClick() {
 		console.log('doing it');
 
-		var res = await markAllAsRead($signedInUser.username);
+		var res = await markAsRead($signedInUser.username, getSelectedMessageIds());
 		if (res.success) {
 			await updateMessages($signedInUser.username);
 			toast('All messages marked as read');
@@ -22,13 +29,13 @@
 		}
 	}
 
-	async function deleteMarked() {
+	async function onDeleteClicked() {
 		try {
 			deleteInProgress = true;
 			let ids = $inbox.filter((m) => m.checked).map((m) => m.id);
-			await MessageRepository.deleteRange(Tables.Messages, ids);
+			await MessageRepository.deleteRange(Tables.Messages, getSelectedMessageIds());
 			await updateMessages($signedInUser.username);
-			console.log("delete finished")
+			console.log('delete finished');
 		} catch (err) {
 			console.log(err);
 		} finally {
@@ -44,12 +51,10 @@
 
 <h1 class="margin-bottom-l">Inbox.</h1>
 
-<button class="btn btn-primary" disabled={!markAllReadEnabled} on:click={onMarkAllAsReadClick}
-	>Mark all as read</button
+<button class="btn btn-primary" disabled={!markAllReadButtonEnabled} on:click={onMarkAsReadClick}
+	>Mark as read</button
 >
-<button disabled={!deleteEnabled} class="btn btn-error" on:click={deleteMarked}
-	>Delete marked</button
->
+<button disabled={!deleteButtonEnabled} class="btn btn-error" on:click={onDeleteClicked}>Delete</button>
 
 <div class="overflow-x-auto">
 	{#if browser && $inbox}

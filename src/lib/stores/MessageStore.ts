@@ -44,10 +44,9 @@ export async function handleIncomingMessage(payload) {
     await updateMessages(payload.new.to);
 }
 
-export async function markAllAsRead(username: string): Promise<ServiceResponse<void | unknown>> {
+export async function markAsRead(username: string, ids: number[]): Promise<ServiceResponse<void | unknown>> {
     try {
-        await MessageRepository.markAllAsRead(username).then(async () =>
-
+        await MessageRepository.markAsRead(username, ids).then(async () =>
             await getUnreadCount(username)
         ).catch(err => {
             console.log(err)
