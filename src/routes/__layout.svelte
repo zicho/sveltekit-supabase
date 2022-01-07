@@ -38,19 +38,18 @@
 	import { session } from '$app/stores';
 	import { logout, signedInUser } from '$lib/stores/UserStore';
 	import { unreadMessages } from '$lib/stores/MessageStore';
-	import {
-		showMessageModal,
-		showConfirmModal
-	} from '$lib/stores/ModalStore';
-import MessageModal from '$lib/components/UI/MessageModal.svelte';
-import ConfirmModal from '$lib/components/UI/ConfirmModal.svelte';
+	import { showMessageModal, showConfirmModal } from '$lib/stores/ModalStore';
+	import MessageModal from '$lib/components/UI/MessageModal.svelte';
+	import ConfirmModal from '$lib/components/UI/ConfirmModal.svelte';
 
 	async function onLogoutClicked() {
-		showConfirmModal('Do you want to logout?', async () => {
-			const res = await fetch('/api/user/logout', {
-				method: 'POST'
-			}).finally(() => logout());
-		});
+		showConfirmModal('Do you want to logout?', async () => logout());
+	}
+
+	async function logout() {
+		const res = await fetch('/api/user/logout', {
+			method: 'POST'
+		}).finally(() => logout());
 	}
 
 	function testFunction() {
@@ -114,5 +113,5 @@ import ConfirmModal from '$lib/components/UI/ConfirmModal.svelte';
 	<FlatToast {data} />
 </ToastContainer>
 
-<MessageModal/>
+<MessageModal />
 <ConfirmModal />

@@ -29,11 +29,11 @@
 
 			let data = (await res.json()) as ServiceResponse<{
 				session: Session;
-				userProfileModel: UserProfileModel;
+				profile: UserProfileModel;
 			}>;
 
 			if (data.success) {
-				setUserAndSession(data.data.session, data.data.userProfileModel);
+				setUserAndSession(data.data.session, data.data.profile);
 				// addToast('Welcome ' + $signedInUser.username);
 				dispatch('success');
 			} else {
