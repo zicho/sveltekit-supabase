@@ -1,6 +1,8 @@
 # SvelteKit and Supabase app
 ## Demo, testing, prototyping, etc. Mainly for learning.
 
+I am not a SvelteKit or Supabase expert by any means. My way of doing thing may be wildly unidiomatic. Tread with caution.
+
 ### Basic architecture
 
 I have tried to separate client and server logic as much as possible. That's it for now. 
