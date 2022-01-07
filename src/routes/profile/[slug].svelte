@@ -29,6 +29,11 @@
 
 	export let user: UserProfileModel;
 	let showMessageModal: boolean = false;
+
+	function onMessageSent() {
+		showMessageModal = false;
+		
+	}
 </script>
 
 <h1>Profile of {user.username}</h1>
@@ -41,6 +46,6 @@
 <button on:click="{() => showMessageModal = !showMessageModal}" class="btn btn-primary">Send message</button> 
 {#if showMessageModal}
 
-    <SendPrivateMessage sender={$signedInUser.username} recipient={user.username} />
+    <SendPrivateMessage sender={$signedInUser.username} recipient={user.username} on:success={onMessageSent} />
 
 {/if}

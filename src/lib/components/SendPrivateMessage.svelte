@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { PrivateMessageModel } from '$lib/models/messaging/PrivateMessageModel';
 	import type { ServiceResponse } from '$lib/models/ServiceResponse';
+	import { toast } from '$lib/utils/ToastHandler';
+	import { isNullOrEmpty } from '$lib/validation/strings'
 
 	// import { sendPrivateMessage } from '$lib/services/MessageService';
 
@@ -27,6 +29,8 @@
 			let data = (await res.json()) as ServiceResponse<void>;
 
 			if (data.success) {
+				model.content = '';
+				toast('Message successfully sent!');
 				dispatch('success');
 			}
 		} catch (err) {
@@ -61,7 +65,13 @@
 		/>
 	</div>
 	<div class="form-control">
-		<button type="submit" class="btn" on:click|preventDefault={onSubmit}>Send </button>
+		<button
+			disabled={isNullOrEmpty(model.content)}
+			type="submit"
+			class="btn"
+			on:click|preventDefault={onSubmit}
+			>Send
+		</button>
 	</div>
 </form>
 <label class="label">
