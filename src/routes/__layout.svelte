@@ -39,14 +39,14 @@
 	import { logout, signedInUser } from '$lib/stores/UserStore';
 	import { unreadMessages } from '$lib/stores/MessageStore';
 	import {
-		modalIsOpen,
-		modalMessage,
-		onModalConfirmClicked,
-		showModal
+		showMessageModal,
+		showConfirmModal
 	} from '$lib/stores/ModalStore';
+import MessageModal from '$lib/components/UI/MessageModal.svelte';
+import ConfirmModal from '$lib/components/UI/ConfirmModal.svelte';
 
 	async function onLogoutClicked() {
-		showModal('Do you want to logout?', async () => {
+		showConfirmModal('Do you want to logout?', async () => {
 			const res = await fetch('/api/user/logout', {
 				method: 'POST'
 			}).finally(() => logout());
@@ -54,13 +54,9 @@
 	}
 
 	function testFunction() {
-		showModal('Kill signal received. All application data purged. Server will now reset.');
+		showMessageModal('Kill signal received. All application data purged. Server will now reset.');
 	}
 </script>
-
-<ToastContainer placement="bottom-right" let:data>
-	<FlatToast {data} />
-</ToastContainer>
 
 <div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content">
 	<div class="flex-none px-2 mx-2">
@@ -114,15 +110,9 @@
 	<slot />
 </div>
 
-<div id="my-modal" class="modal" class:modal-open={$modalIsOpen}>
-	<div class="modal-box">
-		<p>
-			{$modalMessage}
-		</p>
-		<div class="modal-action">
-			<!-- <a class="btn" on:click={() => ($modalIsOpen = false)}>Close</a> -->
-			<a class="btn btn-primary" on:click={() => onModalConfirmClicked()}>Yes</a>
-			<a class="btn btn-primary" on:click={() => ($modalIsOpen = false)}>Close</a>
-		</div>
-	</div>
-</div>
+<ToastContainer placement="bottom-right" let:data>
+	<FlatToast {data} />
+</ToastContainer>
+
+<MessageModal/>
+<ConfirmModal />

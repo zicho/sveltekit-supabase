@@ -1,16 +1,23 @@
 import { writable } from "svelte/store";
 
-export let modalIsOpen = writable<boolean>(false);
-let modalConfirmAction: Function;
+export let confirmModalIsOpen = writable<boolean>(false);
+export let messageModalIsOpen = writable<boolean>(false);
 export let modalMessage = writable<string>();
 
-export function showModal(msg: string, confirmAction?: Function) {
-    modalIsOpen.set(true);
+let modalConfirmAction: Function;
+
+export function showMessageModal(msg: string) {
+    messageModalIsOpen.set(true);
+    modalMessage.set(msg);
+}
+
+export function showConfirmModal(msg: string, confirmAction: Function) {
+    confirmModalIsOpen.set(true);
     modalConfirmAction = confirmAction;
     modalMessage.set(msg);
 }
 
 export function onModalConfirmClicked() {
     modalConfirmAction();
-    modalIsOpen.set(false);
+    confirmModalIsOpen.set(false);
 }
