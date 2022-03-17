@@ -32,7 +32,7 @@
 	Users:
 	{#each users as u}
 		<li>
-			<a href="profile/{u.username}">{u.username}</a>
+			<a href="profile/@{u.username}">{u.username}</a>
 		</li>
 	{/each}
 </ul> 

@@ -65,14 +65,13 @@ import ConfirmModal from '$lib/components/UI/ConfirmModal.svelte';
 
 	<div class="flex-1 px-2 mx-2">
 		{#if $signedInUser && $session}
-			<div class="items-stretch hidden lg:flex">
-				<a href="/profile/{$signedInUser.username}" class="btn btn-ghost btn-sm rounded-btn"
+			<div>
+				<a href="/profile/@{$signedInUser.username}" class="btn btn-ghost btn-sm rounded-btn"
 					><Fa class="margin-right-s" icon={faUser} />{$signedInUser.username}</a
 				>
-			</div>
-			<div class="items-stretch hidden lg:flex">
+			
 				<a href="/inbox/" class="btn btn-ghost btn-sm rounded-btn"
-					><Fa class="margin-right-s" icon={faEnvelope} />Inbox {#if $unreadMessages > 0}({$unreadMessages}){/if}</a
+					><Fa icon={faEnvelope} />{#if $unreadMessages > 0}<span class="margin-left-s">({$unreadMessages})</span>{/if}</a
 				>
 			</div>
 		{/if}

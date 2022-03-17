@@ -1,10 +1,10 @@
 export class UserProfileModel {
 
-    constructor(username?: string, desc?: string) {
+    constructor(username?: string, description?: string) {
         this.username = username
-        this.desc = desc
+        this.description = description
     }
     public username: string;
-    public desc: string;
+    public description: string;
 
 }
